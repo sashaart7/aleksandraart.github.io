@@ -2,13 +2,13 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Мое Портфолио</title>
+  <title>Портфолио Александры</title>
   <style>
     body { 
       margin: 0; 
       overflow: hidden; 
-      background: #000; 
-      color: white; 
+      background: #1a1a1a; 
+      color: #fff; 
       font-family: Arial, sans-serif; 
     }
     canvas { 
@@ -17,18 +17,28 @@
     }
     .content { 
       position: absolute; 
-      top: 20px; 
-      left: 20px; 
+      top: 50px; 
+      left: 50px; 
       z-index: 1; 
+      max-width: 400px; 
+    }
+    h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 18px;
+      line-height: 1.5;
+      margin: 10px 0;
     }
   </style>
 </head>
 <body>
   <div class="content">
-    <h1>Привет, я [Ваше имя]</h1>
-    <p>Обо мне: Здесь немного о вас.</p>
-    <p>Навыки: HTML, CSS, 3D-дизайн</p>
-    <p>Портфолио: Скоро добавлю проекты!</p>
+    <h1>Привет, я Александра</h1>
+    <p>Обо мне: Я увлекаюсь веб-разработкой и созданием интерактивных 3D-проектов.</p>
+    <p>Навыки: HTML, CSS, JavaScript, Three.js, 3D-дизайн</p>
+    <p>Портфолио: Скоро здесь появятся мои проекты!</p>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
@@ -40,20 +50,63 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    // Создаем 3D-кнопку (куб)
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
+    // Создаем три 3D-кнопки
+    const geometry = new THREE.BoxGeometry(2, 0.5, 0.2); // Плоская форма кнопки
+
+    const button1 = new THREE.Mesh(
+      geometry,
+      new THREE.MeshBasicMaterial({ color: 0xff5555 }) // Красная кнопка
+    );
+    button1.position.set(-2, 1, 0); // Позиция первой кнопки
+    scene.add(button1);
+
+    const button2 = new THREE.Mesh(
+      geometry,
+      new THREE.MeshBasicMaterial({ color: 0x55ff55 }) // Зеленая кнопка
+    );
+    button2.position.set(0, 0, 0); // Позиция второй кнопки
+    scene.add(button2);
+
+    const button3 = new THREE.Mesh(
+      geometry,
+      new THREE.MeshBasicMaterial({ color: 0x5555ff }) // Синяя кнопка
+    );
+    button3.position.set(2, -1, 0); // Позиция третьей кнопки
+    scene.add(button3);
 
     // Позиция камеры
     camera.position.z = 5;
 
+    // Интерактивность (реакция на мышь)
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    window.addEventListener('mousemove', (event) => {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    });
+
     // Анимация
     function animate() {
       requestAnimationFrame(animate);
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.01;
+
+      // Плавное вращение кнопок
+      button1.rotation.y += 0.01;
+      button2.rotation.y += 0.01;
+      button3.rotation.y += 0.01;
+
+      // Проверка наведения мыши
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects([button1, button2, button3]);
+
+      // Эффект при наведении
+      [button1, button2, button3].forEach(btn => {
+        btn.scale.set(1, 1, 1); // Обычный размер
+      });
+      if (intersects.length > 0) {
+        intersects[0].object.scale.set(1.2, 1.2, 1.2); // Увеличение при наведении
+      }
+
       renderer.render(scene, camera);
     }
     animate();
