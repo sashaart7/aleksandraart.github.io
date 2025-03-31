@@ -77,7 +77,7 @@
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Мягкие тени
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
 
     // Освещение
@@ -100,54 +100,35 @@
 
     // Загрузка GLTF-моделей
     const loader = new THREE.GLTFLoader();
-    let chair, computer, desk; // Переменные для моделей
+    let chair, computer, desk;
 
-    // Стул (chair.glb)
-    loader.load(
-      'https://aleksandraart.github.io/chair.glb',
-      (gltf) => {
-        chair = gltf.scene;
-        chair.scale.set(1, 1, 1); // Настройте масштаб, если нужно
-        chair.position.set(-2, 0, 2);
-        chair.castShadow = true;
-        chair.receiveShadow = true;
-        scene.add(chair);
-      },
-      (xhr) => console.log('Стул: ' + (xhr.loaded / xhr.total * 100) + '% загружено'),
-      (error) => console.error('Ошибка загрузки стула:', error)
-    );
+    // Функция для загрузки моделей
+    function loadModel(url, name, position, scale) {
+      loader.load(
+        url,
+        (gltf) => {
+          const model = gltf.scene;
+          model.scale.set(scale, scale, scale);
+          model.position.set(position.x, position.y, position.z);
+          model.castShadow = true;
+          model.receiveShadow = true;
+          scene.add(model);
+          if (name === 'chair') chair = model;
+          if (name === 'computer') computer = model;
+          if (name === 'desk') desk = model;
+          console.log(`${name} успешно загружен`);
+        },
+        (xhr) => console.log(`${name}: ${(xhr.loaded / xhr.total * 100).toFixed(2)}% загружено`),
+        (error) => console.error(`Ошибка загрузки ${name}:`, error)
+      );
+    }
 
-    // Компьютер (computer.glb)
-    loader.load(
-      'https://aleksandraart.github.io/computer.glb',
-      (gltf) => {
-        computer = gltf.scene;
-        computer.scale.set(1, 1, 1);
-        computer.position.set(0, 1, 0);
-        computer.castShadow = true;
-        computer.receiveShadow = true;
-        scene.add(computer);
-      },
-      (xhr) => console.log('Компьютер: ' + (xhr.loaded / xhr.total * 100) + '% загружено'),
-      (error) => console.error('Ошибка загрузки компьютера:', error)
-    );
+    // Загрузка моделей с правильными путями
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/chair.glb', 'chair', { x: -2, y: 0, z: 2 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/computer.glb', 'computer', { x: 0, y: 1, z: 0 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/desk1.glb', 'desk', { x: 0, y: 0, z: 0 }, 1);
 
-    // Стол (desk1.glb)
-    loader.load(
-      'https://aleksandraart.github.io/desk1.glb',
-      (gltf) => {
-        desk = gltf.scene;
-        desk.scale.set(1, 1, 1);
-        desk.position.set(0, 0, 0);
-        desk.castShadow = true;
-        desk.receiveShadow = true;
-        scene.add(desk);
-      },
-      (xhr) => console.log('Стол: ' + (xhr.loaded / xhr.total * 100) + '% загружено'),
-      (error) => console.error('Ошибка загрузки стола:', error)
-    );
-
-    // Дополнительные объекты для богатства сцены
+    // Дополнительные объекты
     const torusGeometry = new THREE.TorusGeometry(0.5, 0.2, 16, 100);
     const torusMaterial = new THREE.MeshPhongMaterial({ color: 0xff5555, shininess: 100 });
     const torus = new THREE.Mesh(torusGeometry, torusMaterial);
@@ -187,21 +168,15 @@
       requestAnimationFrame(animate);
 
       // Анимация GLTF-моделей
-      if (chair) {
-        chair.rotation.y += 0.01; // Вращение стула
-      }
-      if (computer) {
-        computer.position.y = 1 + Math.sin(Date.now() * 0.001) * 0.1; // Плавное колебание
-      }
-      if (desk) {
-        desk.rotation.y += 0.005; // Медленное вращение стола
-      }
+      if (chair) chair.rotation.y += 0.01;
+      if (computer) computer.position.y = 1 + Math.sin(Date.now() * 0.001) * 0.1;
+      if (desk) desk.rotation.y += 0.005;
 
       // Анимация дополнительных объектов
       torus.rotation.x += 0.02;
       torus.rotation.y += 0.02;
       sphere.rotation.y += 0.015;
-      lamp.position.y = 0.5 + Math.sin(Date.now() * 0.002) * 0.2; // Лампа "плавает"
+      lamp.position.y = 0.5 + Math.sin(Date.now() * 0.002) * 0.2;
 
       // Эффект наведения
       raycaster.setFromCamera(mouse, camera);
@@ -210,14 +185,14 @@
       if (computer) interactiveObjects.push(computer);
       if (desk) interactiveObjects.push(desk);
 
-      const intersects = raycaster.intersectObjects(interactiveObjects);
+      const intersects = raycaster.intersectObjects(interactiveObjects, true);
       interactiveObjects.forEach(obj => {
         obj.scale.set(1, 1, 1);
-        if (obj.material) obj.material.color.setHex(obj.material.color?.getHex() || 0xffffff);
+        if (obj.material) obj.material.color?.setHex(obj.material.color?.getHex() || 0xffffff);
       });
       if (intersects.length > 0) {
         intersects[0].object.scale.set(1.1, 1.1, 1.1);
-        if (intersects[0].object.material) intersects[0].object.material.color.setHex(0xcccccc);
+        if (intersects[0].object.material) intersects[0].object.material.color?.setHex(0xcccccc);
       }
 
       renderer.render(scene, camera);
