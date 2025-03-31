@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Портфолио Александры</title>
   <style>
     body { 
@@ -157,6 +158,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://unpkg.com/three@0.134.0/examples/js/loaders/GLTFLoader.js"></script>
   <script src="https://unpkg.com/three@0.134.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.min.js"></script>
   <script>
     // Сцена
     const scene = new THREE.Scene();
@@ -196,17 +198,27 @@
           model.position.set(position.x, position.y, position.z);
           model.castShadow = true;
           model.receiveShadow = true;
-          model.traverse((child) => {
-            if (child.isMesh) {
-              child.material = new THREE.MeshPhongMaterial({
-                color: name === 'chair' ? 0x8b4513 : 
-                       name === 'computer' ? 0x555555 : 
-                       name === 'desk' ? 0x8b5a2b : 
-                       name === 'camera' ? 0x333333 : 0xd2b48c,
-                shininess: 50,
-              });
-            }
-          });
+
+          // Применяем цвета только для стула и стола
+          if (name === 'chair' || name === 'desk') {
+            model.traverse((child) => {
+              if (child.isMesh) {
+                child.material = new THREE.MeshPhongMaterial({
+                  color: name === 'chair' ? 0xffb6c1 : 0xffffff, // Нежно-розовый стул, белый стол
+                  shininess: 50,
+                });
+              }
+            });
+          }
+          // Для компьютера сохраняем оригинальные текстуры
+          if (name === 'computer') {
+            model.traverse((child) => {
+              if (child.isMesh && child.material) {
+                child.material.shininess = 50; // Улучшаем блеск, если нужно
+              }
+            });
+          }
+
           scene.add(model);
           if (name === 'chair') chair = model;
           if (name === 'computer') computer = model;
@@ -221,7 +233,7 @@
     }
 
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/chair.glb', 'chair', { x: -2, y: 0, z: 2 }, 1);
-    loadModel('https://sashaart7.github.io/aleksandraart.github.io/computer.glb', 'computer', { x: 0, y: 0.5, z: 0 }, 1); 
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/computer.glb', 'computer', { x: 0, y: 0.5, z: 0 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/desk1.glb', 'desk', { x: 0, y: 0, z: 0 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/camera.glb', 'camera', { x: 2, y: 0.5, z: -1 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/wheat.glb', 'wheat', { x: -3, y: 0, z: -2 }, 1);
@@ -265,6 +277,7 @@
     // Интерактивность
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
+    let lastHovered = null;
 
     window.addEventListener('mousemove', (event) => {
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -313,9 +326,19 @@
       controls.enabled = true;
     });
 
+    // Анимация наведения
+    function animateScale(object, targetScale) {
+      new TWEEN.Tween(object.scale)
+        .to({ x: targetScale, y: targetScale, z: targetScale }, 300)
+        .easing(TWEEN.Easing.Quadratic.Out)
+        .start();
+    }
+
     // Анимация
     function animate() {
       requestAnimationFrame(animate);
+      TWEEN.update();
+
       torus.rotation.x += 0.01;
       torus.rotation.y += 0.01;
       sphere.rotation.y += 0.01;
@@ -323,11 +346,21 @@
 
       // Эффект наведения
       raycaster.setFromCamera(mouse, camera);
-      const interactiveObjects = [torus, sphere, lamp, chair, computer, cameraObj, wheat];
+      const interactiveObjects = [torus, sphere, lamp, cameraObj, wheat];
       const intersects = raycaster.intersectObjects(interactiveObjects, true);
-      interactiveObjects.forEach(obj => obj.scale.set(1, 1, 1));
+
       if (intersects.length > 0) {
-        intersects[0].object.scale.set(1.1, 1.1, 1.1);
+        const hovered = intersects[0].object.parent || intersects[0].object;
+        if (hovered !== lastHovered) {
+          if (lastHovered && interactiveObjects.includes(lastHovered)) {
+            animateScale(lastHovered, 1);
+          }
+          animateScale(hovered, 1.1);
+          lastHovered = hovered;
+        }
+      } else if (lastHovered) {
+        animateScale(lastHovered, 1);
+        lastHovered = null;
       }
 
       controls.update();
