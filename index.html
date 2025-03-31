@@ -7,77 +7,173 @@
     body { 
       margin: 0; 
       overflow: hidden; 
-      background: #1a1a1a; 
+      background: linear-gradient(135deg, #1a1a1a, #2a2a2a); 
       color: #fff; 
-      font-family: Arial, sans-serif; 
+      font-family: 'Arial', sans-serif; 
     }
     canvas { 
       width: 100%; 
       height: 100vh; 
+      position: absolute; 
+      top: 0; 
+      left: 0; 
     }
     .content { 
       position: absolute; 
-      top: 50px; 
+      top: 50%; 
       left: 50px; 
+      transform: translateY(-50%); 
       z-index: 1; 
-      max-width: 400px; 
+      max-width: 500px; 
+      opacity: 0; 
+      animation: fadeIn 1.5s ease forwards; 
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
     }
     h1 {
-      font-size: 36px;
-      margin-bottom: 20px;
+      font-size: 48px;
+      margin: 0 0 20px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     }
     p {
       font-size: 18px;
-      line-height: 1.5;
+      line-height: 1.6;
       margin: 10px 0;
+      opacity: 0;
+      animation: fadeIn 2s ease forwards;
+      animation-delay: 0.5s;
+    }
+    .portfolio-item {
+      margin: 15px 0;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 5px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .portfolio-item:hover {
+      transform: translateX(10px);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
     }
   </style>
 </head>
 <body>
   <div class="content">
     <h1>Привет, я Александра</h1>
-    <p>Обо мне: Я увлекаюсь веб-разработкой и созданием интерактивных 3D-проектов.</p>
-    <p>Навыки: HTML, CSS, JavaScript, Three.js, 3D-дизайн</p>
-    <p>Портфолио: Скоро здесь появятся мои проекты!</p>
+    <p>Обо мне: Я веб-разработчик и дизайнер, создаю интерактивные 3D-миры. Моя страсть — технологии и искусство.</p>
+    <p>Навыки: HTML, CSS, JavaScript, Three.js, Blender, UI/UX</p>
+    <p>Портфолио:</p>
+    <div class="portfolio-item">Проект 1: 3D-рабочая комната (см. справа)</div>
+    <div class="portfolio-item">Проект 2: Интерактивный дизайн (скоро)</div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.134.0/examples/js/loaders/GLTFLoader.js"></script>
   <script>
     // Создаем сцену
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Мягкие тени
     document.body.appendChild(renderer.domElement);
 
-    // Создаем три 3D-кнопки
-    const geometry = new THREE.BoxGeometry(2, 0.5, 0.2); // Плоская форма кнопки
+    // Освещение
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambientLight);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(5, 10, 5);
+    directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.width = 1024;
+    directionalLight.shadow.mapSize.height = 1024;
+    scene.add(directionalLight);
 
-    const button1 = new THREE.Mesh(
-      geometry,
-      new THREE.MeshBasicMaterial({ color: 0xff5555 }) // Красная кнопка
-    );
-    button1.position.set(-2, 1, 0); // Позиция первой кнопки
-    scene.add(button1);
+    // Пол
+    const floorGeometry = new THREE.PlaneGeometry(20, 20);
+    const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x444444, roughness: 0.8 });
+    const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+    floor.rotation.x = -Math.PI / 2;
+    floor.receiveShadow = true;
+    scene.add(floor);
 
-    const button2 = new THREE.Mesh(
-      geometry,
-      new THREE.MeshBasicMaterial({ color: 0x55ff55 }) // Зеленая кнопка
-    );
-    button2.position.set(0, 0, 0); // Позиция второй кнопки
-    scene.add(button2);
+    // Загрузка GLTF-моделей
+    const loader = new THREE.GLTFLoader();
+    let chair, computer, desk; // Переменные для моделей
 
-    const button3 = new THREE.Mesh(
-      geometry,
-      new THREE.MeshBasicMaterial({ color: 0x5555ff }) // Синяя кнопка
+    // Стул (chair.glb)
+    loader.load(
+      'https://aleksandraart.github.io/chair.glb',
+      (gltf) => {
+        chair = gltf.scene;
+        chair.scale.set(1, 1, 1); // Настройте масштаб, если нужно
+        chair.position.set(-2, 0, 2);
+        chair.castShadow = true;
+        chair.receiveShadow = true;
+        scene.add(chair);
+      },
+      (xhr) => console.log('Стул: ' + (xhr.loaded / xhr.total * 100) + '% загружено'),
+      (error) => console.error('Ошибка загрузки стула:', error)
     );
-    button3.position.set(2, -1, 0); // Позиция третьей кнопки
-    scene.add(button3);
+
+    // Компьютер (computer.glb)
+    loader.load(
+      'https://aleksandraart.github.io/computer.glb',
+      (gltf) => {
+        computer = gltf.scene;
+        computer.scale.set(1, 1, 1);
+        computer.position.set(0, 1, 0);
+        computer.castShadow = true;
+        computer.receiveShadow = true;
+        scene.add(computer);
+      },
+      (xhr) => console.log('Компьютер: ' + (xhr.loaded / xhr.total * 100) + '% загружено'),
+      (error) => console.error('Ошибка загрузки компьютера:', error)
+    );
+
+    // Стол (desk1.glb)
+    loader.load(
+      'https://aleksandraart.github.io/desk1.glb',
+      (gltf) => {
+        desk = gltf.scene;
+        desk.scale.set(1, 1, 1);
+        desk.position.set(0, 0, 0);
+        desk.castShadow = true;
+        desk.receiveShadow = true;
+        scene.add(desk);
+      },
+      (xhr) => console.log('Стол: ' + (xhr.loaded / xhr.total * 100) + '% загружено'),
+      (error) => console.error('Ошибка загрузки стола:', error)
+    );
+
+    // Дополнительные объекты для богатства сцены
+    const torusGeometry = new THREE.TorusGeometry(0.5, 0.2, 16, 100);
+    const torusMaterial = new THREE.MeshPhongMaterial({ color: 0xff5555, shininess: 100 });
+    const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+    torus.position.set(3, 1, -2);
+    torus.castShadow = true;
+    scene.add(torus);
+
+    const sphereGeometry = new THREE.SphereGeometry(0.3, 32, 32);
+    const sphereMaterial = new THREE.MeshPhongMaterial({ color: 0x55ff55, shininess: 100 });
+    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+    sphere.position.set(-3, 2, -1);
+    sphere.castShadow = true;
+    scene.add(sphere);
+
+    const lampGeometry = new THREE.CylinderGeometry(0.2, 0.2, 1, 32);
+    const lampMaterial = new THREE.MeshPhongMaterial({ color: 0xffff00, shininess: 100 });
+    const lamp = new THREE.Mesh(lampGeometry, lampMaterial);
+    lamp.position.set(2, 0.5, 2);
+    lamp.castShadow = true;
+    scene.add(lamp);
 
     // Позиция камеры
-    camera.position.z = 5;
+    camera.position.set(5, 5, 10);
+    camera.lookAt(0, 1, 0);
 
-    // Интерактивность (реакция на мышь)
+    // Интерактивность
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
@@ -90,21 +186,38 @@
     function animate() {
       requestAnimationFrame(animate);
 
-      // Плавное вращение кнопок
-      button1.rotation.y += 0.01;
-      button2.rotation.y += 0.01;
-      button3.rotation.y += 0.01;
+      // Анимация GLTF-моделей
+      if (chair) {
+        chair.rotation.y += 0.01; // Вращение стула
+      }
+      if (computer) {
+        computer.position.y = 1 + Math.sin(Date.now() * 0.001) * 0.1; // Плавное колебание
+      }
+      if (desk) {
+        desk.rotation.y += 0.005; // Медленное вращение стола
+      }
 
-      // Проверка наведения мыши
+      // Анимация дополнительных объектов
+      torus.rotation.x += 0.02;
+      torus.rotation.y += 0.02;
+      sphere.rotation.y += 0.015;
+      lamp.position.y = 0.5 + Math.sin(Date.now() * 0.002) * 0.2; // Лампа "плавает"
+
+      // Эффект наведения
       raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects([button1, button2, button3]);
+      const interactiveObjects = [torus, sphere, lamp];
+      if (chair) interactiveObjects.push(chair);
+      if (computer) interactiveObjects.push(computer);
+      if (desk) interactiveObjects.push(desk);
 
-      // Эффект при наведении
-      [button1, button2, button3].forEach(btn => {
-        btn.scale.set(1, 1, 1); // Обычный размер
+      const intersects = raycaster.intersectObjects(interactiveObjects);
+      interactiveObjects.forEach(obj => {
+        obj.scale.set(1, 1, 1);
+        if (obj.material) obj.material.color.setHex(obj.material.color?.getHex() || 0xffffff);
       });
       if (intersects.length > 0) {
-        intersects[0].object.scale.set(1.2, 1.2, 1.2); // Увеличение при наведении
+        intersects[0].object.scale.set(1.1, 1.1, 1.1);
+        if (intersects[0].object.material) intersects[0].object.material.color.setHex(0xcccccc);
       }
 
       renderer.render(scene, camera);
