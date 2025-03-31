@@ -56,7 +56,7 @@
       transform: translateX(10px);
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     }
-    /* Стили для всплывающего окна */
+    /* Стили для всплывающих окон */
     .modal {
       display: none;
       position: fixed;
@@ -73,14 +73,18 @@
       background: #f7e7e3;
       padding: 20px;
       border-radius: 10px;
-      max-width: 500px;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto; /* Скролл, если контент большой */
       text-align: center;
       position: relative;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
     .modal-content img {
       max-width: 100%;
       height: auto;
       margin-bottom: 15px;
+      border-radius: 5px;
     }
     .close-btn {
       position: absolute;
@@ -88,6 +92,27 @@
       right: 10px;
       font-size: 24px;
       cursor: pointer;
+      color: #333;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+    /* Стили для проектов */
+    .project-list {
+      text-align: left;
+      margin-top: 20px;
+    }
+    .project-item {
+      margin-bottom: 15px;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 5px;
+    }
+    .project-item h3 {
+      margin: 0 0 5px;
+    }
+    .project-item p {
+      margin: 0;
     }
   </style>
 </head>
@@ -101,12 +126,31 @@
     <div class="portfolio-item">Проект 2: Интерактивный дизайн (скоро)</div>
   </div>
 
-  <!-- Всплывающее окно -->
-  <div id="modal" class="modal">
+  <!-- Всплывающее окно для фотоаппарата -->
+  <div id="modal-camera" class="modal">
     <div class="modal-content">
-      <span class="close-btn">×</span>
+      <span class="close-btn" onclick="closeModal('modal-camera')">×</span>
       <img src="https://sashaart7.github.io/aleksandraart.github.io/sashaphoto.jpg" alt="Обо мне">
       <p>Обо мне: Меня зовут Александра, я творческая личность, которая обожает исследовать мир через код и дизайн. Моя работа — это сочетание функциональности и эстетики, вдохновленное природой и современными технологиями. В свободное время я люблю фотографировать и создавать 3D-модели.</p>
+    </div>
+  </div>
+
+  <!-- Всплывающее окно для компьютера -->
+  <div id="modal-computer" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('modal-computer')">×</span>
+      <h2>Мои проекты</h2>
+      <div class="project-list">
+        <div class="project-item">
+          <h3>Проект 1: 3D-комната</h3>
+          <p>Интерактивная 3D-комната, созданная с использованием Three.js и GLTF-моделей.</p>
+        </div>
+        <div class="project-item">
+          <h3>Проект 2: Веб-дизайн</h3>
+          <p>Современный веб-дизайн с акцентом на пользовательский опыт и анимации.</p>
+        </div>
+        <!-- Добавьте больше проектов здесь -->
+      </div>
     </div>
   </div>
 
@@ -186,7 +230,7 @@
 
     // Загрузка моделей
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/chair.glb', 'chair', { x: -2, y: 0, z: 2 }, 1);
-    loadModel('https://sashaart7.github.io/aleksandraart.github.io/computer.glb', 'computer', { x: 0, y: 1, z: 0 }, 0.5);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/computer.glb', 'computer', { x: 0, y: 1, z: 0 }, 0.001); // Уменьшен в 1000 раз
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/desk1.glb', 'desk', { x: 0, y: 0, z: 0 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/camera.glb', 'camera', { x: 2, y: 0.5, z: -1 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/wheat.glb', 'wheat', { x: -3, y: 0, z: -2 }, 1);
@@ -234,21 +278,44 @@
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     });
 
-    // Клик для открытия модального окна
-    const modal = document.getElementById('modal');
-    const closeBtn = document.querySelector('.close-btn');
+    // Клик для открытия модальных окон
     window.addEventListener('click', (event) => {
       raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObject(cameraObj, true);
-      if (intersects.length > 0) {
-        modal.style.display = 'flex';
+      const intersectsCamera = raycaster.intersectObject(cameraObj, true);
+      const intersectsComputer = raycaster.intersectObject(computer, true);
+      if (intersectsCamera.length > 0) {
+        document.getElementById('modal-camera').style.display = 'flex';
+      }
+      if (intersectsComputer.length > 0) {
+        document.getElementById('modal-computer').style.display = 'flex';
       }
     });
-    closeBtn.addEventListener('click', () => {
-      modal.style.display = 'none';
+
+    // Функция для закрытия модальных окон
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
+
+    // Вращение стула
+    let isRotatingChair = false;
+    let previousMouseX = 0;
+    window.addEventListener('mousedown', (event) => {
+      raycaster.setFromCamera(mouse, camera);
+      const intersectsChair = raycaster.intersectObject(chair, true);
+      if (intersectsChair.length > 0) {
+        isRotatingChair = true;
+        previousMouseX = event.clientX;
+      }
     });
-    modal.addEventListener('click', (event) => {
-      if (event.target === modal) modal.style.display = 'none';
+    window.addEventListener('mousemove', (event) => {
+      if (isRotatingChair) {
+        const deltaX = event.clientX - previousMouseX;
+        chair.rotation.y += deltaX * 0.01;
+        previousMouseX = event.clientX;
+      }
+    });
+    window.addEventListener('mouseup', () => {
+      isRotatingChair = false;
     });
 
     // Анимация
@@ -259,19 +326,19 @@
       torus.rotation.x += 0.02;
       torus.rotation.y += 0.02;
       sphere.rotation.y += 0.015;
-      lamp.position.y = 0.5 + Math.sin(Date.now() * 0.002) * 0.2;
+      lamp.position.y = 0.5 + Math.sin(Date.now * 0.002) * 0.2;
 
-      // Эффект наведения только для выбранных объектов
+      // Эффект наведения для всех объектов, кроме стола
       raycaster.setFromCamera(mouse, camera);
-      const interactiveObjects = [torus, sphere, lamp, chair, computer, desk]; // Без wheat и camera
+      const interactiveObjects = [torus, sphere, lamp, chair, computer, cameraObj, wheat];
       const intersects = raycaster.intersectObjects(interactiveObjects, true);
       interactiveObjects.forEach(obj => {
-        obj.scale.set(1, 1, 1);
-        if (obj.material) obj.material.color?.setHex(obj.material.color?.getHex() || 0xffffff);
+        if (obj !== desk) {
+          obj.scale.set(1, 1, 1);
+        }
       });
-      if (intersects.length > 0) {
+      if (intersects.length > 0 && intersects[0].object !== desk) {
         intersects[0].object.scale.set(1.1, 1.1, 1.1);
-        if (intersects[0].object.material) intersects[0].object.material.color?.setHex(0xdddddd);
       }
 
       controls.update();
