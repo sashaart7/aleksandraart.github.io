@@ -104,8 +104,8 @@
   <!-- Всплывающее окно -->
   <div id="modal" class="modal">
     <div class="modal-content">
-      <span class="close-btn">&times;</span>
-      <img src="https://via.placeholder.com/300x200" alt="Обо мне"> <!-- Замените на свою картинку -->
+      <span class="close-btn">×</span>
+      <img src="https://sashaart7.github.io/aleksandraart.github.io/sashaphoto.jpg" alt="Обо мне">
       <p>Обо мне: Меня зовут Александра, я творческая личность, которая обожает исследовать мир через код и дизайн. Моя работа — это сочетание функциональности и эстетики, вдохновленное природой и современными технологиями. В свободное время я люблю фотографировать и создавать 3D-модели.</p>
     </div>
   </div>
@@ -186,7 +186,7 @@
 
     // Загрузка моделей
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/chair.glb', 'chair', { x: -2, y: 0, z: 2 }, 1);
-    loadModel('https://sashaart7.github.io/aleksandraart.github.io/computer.glb', 'computer', { x: 0, y: 1, z: 0 }, 0.5); // Уменьшенный компьютер
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/computer.glb', 'computer', { x: 0, y: 1, z: 0 }, 0.5);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/desk1.glb', 'desk', { x: 0, y: 0, z: 0 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/camera.glb', 'camera', { x: 2, y: 0.5, z: -1 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/wheat.glb', 'wheat', { x: -3, y: 0, z: -2 }, 1);
@@ -261,15 +261,9 @@
       sphere.rotation.y += 0.015;
       lamp.position.y = 0.5 + Math.sin(Date.now() * 0.002) * 0.2;
 
-      // Эффект наведения
+      // Эффект наведения только для выбранных объектов
       raycaster.setFromCamera(mouse, camera);
-      const interactiveObjects = [torus, sphere, lamp];
-      if (chair) interactiveObjects.push(chair);
-      if (computer) interactiveObjects.push(computer);
-      if (desk) interactiveObjects.push(desk);
-      if (cameraObj) interactiveObjects.push(cameraObj);
-      if (wheat) interactiveObjects.push(wheat);
-
+      const interactiveObjects = [torus, sphere, lamp, chair, computer, desk]; // Без wheat и camera
       const intersects = raycaster.intersectObjects(interactiveObjects, true);
       interactiveObjects.forEach(obj => {
         obj.scale.set(1, 1, 1);
