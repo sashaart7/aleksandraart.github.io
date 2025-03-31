@@ -7,8 +7,8 @@
     body { 
       margin: 0; 
       overflow: hidden; 
-      background: linear-gradient(135deg, #1a1a1a, #2a2a2a); 
-      color: #fff; 
+      background: linear-gradient(135deg, #e0e0e0, #f5f5f5); /* Светлый градиент */
+      color: #333; /* Темный текст для контраста */
       font-family: 'Arial', sans-serif; 
     }
     canvas { 
@@ -35,7 +35,7 @@
       font-size: 48px;
       margin: 0 0 20px;
       letter-spacing: 2px;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     }
     p {
       font-size: 18px;
@@ -48,13 +48,13 @@
     .portfolio-item {
       margin: 15px 0;
       padding: 10px;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.05);
       border-radius: 5px;
       transition: transform 0.3s, box-shadow 0.3s;
     }
     .portfolio-item:hover {
       transform: translateX(10px);
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     }
   </style>
 </head>
@@ -70,6 +70,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://unpkg.com/three@0.134.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://unpkg.com/three@0.134.0/examples/js/controls/OrbitControls.js"></script>
   <script>
     // Создаем сцену
     const scene = new THREE.Scene();
@@ -80,19 +81,19 @@
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
 
-    // Освещение
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    // Освещение (ярче)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1); // Яркий фоновый свет
     scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5); // Яркий направленный свет
     directionalLight.position.set(5, 10, 5);
     directionalLight.castShadow = true;
     directionalLight.shadow.mapSize.width = 1024;
     directionalLight.shadow.mapSize.height = 1024;
     scene.add(directionalLight);
 
-    // Пол
+    // Пол (светлее)
     const floorGeometry = new THREE.PlaneGeometry(20, 20);
-    const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x444444, roughness: 0.8 });
+    const floorMaterial = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, roughness: 0.8 });
     const floor = new THREE.Mesh(floorGeometry, floorMaterial);
     floor.rotation.x = -Math.PI / 2;
     floor.receiveShadow = true;
@@ -102,7 +103,7 @@
     const loader = new THREE.GLTFLoader();
     let chair, computer, desk;
 
-    // Функция для загрузки моделей
+    // Функция для загрузки моделей с материалами
     function loadModel(url, name, position, scale) {
       loader.load(
         url,
@@ -112,6 +113,19 @@
           model.position.set(position.x, position.y, position.z);
           model.castShadow = true;
           model.receiveShadow = true;
+
+          // Добавляем материал (если модель не имеет своего)
+          model.traverse((child) => {
+            if (child.isMesh) {
+              if (!child.material || child.material.type === 'MeshBasicMaterial') {
+                child.material = new THREE.MeshPhongMaterial({
+                  color: name === 'chair' ? 0x8b4513 : name === 'computer' ? 0x555555 : 0x8b5a2b, // Коричневый стул, серый компьютер, деревянный стол
+                  shininess: 50,
+                });
+              }
+            }
+          });
+
           scene.add(model);
           if (name === 'chair') chair = model;
           if (name === 'computer') computer = model;
@@ -123,7 +137,7 @@
       );
     }
 
-    // Загрузка моделей с правильными путями
+    // Загрузка моделей
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/chair.glb', 'chair', { x: -2, y: 0, z: 2 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/computer.glb', 'computer', { x: 0, y: 1, z: 0 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/desk1.glb', 'desk', { x: 0, y: 0, z: 0 }, 1);
@@ -154,6 +168,14 @@
     camera.position.set(5, 5, 10);
     camera.lookAt(0, 1, 0);
 
+    // Управление сценой (вращение)
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true; // Плавное вращение
+    controls.dampingFactor = 0.05;
+    controls.screenSpacePanning = false;
+    controls.minDistance = 5;
+    controls.maxDistance = 50;
+
     // Интерактивность
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
@@ -167,12 +189,7 @@
     function animate() {
       requestAnimationFrame(animate);
 
-      // Анимация GLTF-моделей
-      if (chair) chair.rotation.y += 0.01;
-      if (computer) computer.position.y = 1 + Math.sin(Date.now() * 0.001) * 0.1;
-      if (desk) desk.rotation.y += 0.005;
-
-      // Анимация дополнительных объектов
+      // Анимация дополнительных объектов (без GLTF)
       torus.rotation.x += 0.02;
       torus.rotation.y += 0.02;
       sphere.rotation.y += 0.015;
@@ -192,9 +209,10 @@
       });
       if (intersects.length > 0) {
         intersects[0].object.scale.set(1.1, 1.1, 1.1);
-        if (intersects[0].object.material) intersects[0].object.material.color?.setHex(0xcccccc);
+        if (intersects[0].object.material) intersects[0].object.material.color?.setHex(0xdddddd);
       }
 
+      controls.update(); // Обновление управления камерой
       renderer.render(scene, camera);
     }
     animate();
