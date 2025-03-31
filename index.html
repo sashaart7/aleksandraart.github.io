@@ -208,7 +208,7 @@
                   color: name === 'chair' ? 0x8b4513 : 
                          name === 'computer' ? 0x555555 : 
                          name === 'desk' ? 0x8b5a2b : 
-                         name === 'camera' ? 0x333333 : 0xd2b48c, // Серый для камеры, бежевый для wheat
+                         name === 'camera' ? 0x333333 : 0xd2b48c,
                   shininess: 50,
                 });
               }
@@ -305,6 +305,7 @@
       if (intersectsChair.length > 0) {
         isRotatingChair = true;
         previousMouseX = event.clientX;
+        controls.enabled = false; // Отключаем управление камерой
       }
     });
     window.addEventListener('mousemove', (event) => {
@@ -316,6 +317,7 @@
     });
     window.addEventListener('mouseup', () => {
       isRotatingChair = false;
+      controls.enabled = true; // Включаем управление камерой
     });
 
     // Анимация
@@ -326,18 +328,16 @@
       torus.rotation.x += 0.02;
       torus.rotation.y += 0.02;
       sphere.rotation.y += 0.015;
-      lamp.position.y = 0.5 + Math.sin(Date.now * 0.002) * 0.2;
+      lamp.position.y = 0.5 + Math.sin(Date.now() * 0.002) * 0.2;
 
       // Эффект наведения для всех объектов, кроме стола
       raycaster.setFromCamera(mouse, camera);
       const interactiveObjects = [torus, sphere, lamp, chair, computer, cameraObj, wheat];
       const intersects = raycaster.intersectObjects(interactiveObjects, true);
       interactiveObjects.forEach(obj => {
-        if (obj !== desk) {
-          obj.scale.set(1, 1, 1);
-        }
+        obj.scale.set(1, 1, 1);
       });
-      if (intersects.length > 0 && intersects[0].object !== desk) {
+      if (intersects.length > 0) {
         intersects[0].object.scale.set(1.1, 1.1, 1.1);
       }
 
