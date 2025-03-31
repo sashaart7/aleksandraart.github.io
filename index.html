@@ -226,7 +226,7 @@
     }
 
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/chair.glb', 'chair', { x: -2, y: 0, z: 2 }, 1);
-    loadModel('https://sashaart7.github.io/aleksandraart.github.io/computer.glb', 'computer', { x: 0, y: 0.35, z: 0 }, 1.2); // Чуть больше и ниже
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/computer.glb', 'computer', { x: 0, y: 0.35, z: 0 }, 1.2);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/desk1.glb', 'desk', { x: 0, y: 0, z: 0 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/camera.glb', 'camera', { x: 2, y: 0.5, z: -1 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/wheat.glb', 'wheat', { x: -3, y: 0, z: -2 }, 1);
@@ -330,10 +330,10 @@
       // Эффект наведения
       raycaster.setFromCamera(mouse, camera);
       const interactiveObjects = [torus, sphere, lamp, cameraObj, wheat];
-      const intersects = raycaster.intersectObjects(interactiveObjects, true);
 
       interactiveObjects.forEach(obj => {
-        const isHovered = intersects.some(intersect => intersect.object === obj || obj.children.includes(intersect.object));
+        const intersects = raycaster.intersectObject(obj, true);
+        const isHovered = intersects.length > 0;
         const targetScale = isHovered ? 1.1 : 1;
         obj.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
       });
