@@ -20,43 +20,42 @@
     }
     .content { 
       position: absolute; 
-      top: 50%; 
-      left: 50px; 
-      transform: translateY(-50%); 
+      top: 20px; 
+      left: 20px; 
       z-index: 1; 
-      max-width: 500px; 
-      opacity: 0; 
-      animation: fadeIn 1.5s ease forwards; 
+      max-width: 400px; 
+      background: rgba(255, 255, 255, 0.8); 
+      padding: 20px; 
+      border-radius: 10px; 
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      animation: fadeIn 1.5s ease forwards;
     }
     @keyframes fadeIn {
       to { opacity: 1; }
     }
     h1 {
-      font-size: 48px;
-      margin: 0 0 20px;
-      letter-spacing: 2px;
-      text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      font-size: 36px;
+      margin: 0 0 15px;
+      letter-spacing: 1px;
     }
     p {
-      font-size: 18px;
-      line-height: 1.6;
+      font-size: 16px;
+      line-height: 1.5;
       margin: 10px 0;
-      opacity: 0;
-      animation: fadeIn 2s ease forwards;
-      animation-delay: 0.5s;
     }
     .portfolio-item {
-      margin: 15px 0;
-      padding: 10px;
+      margin: 10px 0;
+      padding: 8px;
       background: rgba(0, 0, 0, 0.05);
       border-radius: 5px;
       transition: transform 0.3s, box-shadow 0.3s;
     }
     .portfolio-item:hover {
-      transform: translateX(10px);
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      transform: translateX(5px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
-    /* Стили для всплывающих окон */
+    /* Модальные окна */
     .modal {
       display: none;
       position: fixed;
@@ -64,40 +63,40 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.6);
       z-index: 10;
       justify-content: center;
       align-items: center;
     }
     .modal-content {
       background: #f7e7e3;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 600px;
-      max-height: 80vh;
-      overflow-y: auto; /* Скролл, если контент большой */
+      padding: 25px;
+      border-radius: 15px;
+      max-width: 700px;
+      max-height: 85vh;
+      overflow-y: auto;
       text-align: center;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
       position: relative;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
     .modal-content img {
       max-width: 100%;
       height: auto;
-      margin-bottom: 15px;
-      border-radius: 5px;
+      margin-bottom: 20px;
+      border-radius: 10px;
     }
     .close-btn {
       position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 24px;
+      top: 15px;
+      right: 15px;
+      font-size: 28px;
       cursor: pointer;
-      color: #333;
+      color: #555;
+      transition: color 0.3s;
     }
     .close-btn:hover {
       color: #000;
     }
-    /* Стили для проектов */
     .project-list {
       text-align: left;
       margin-top: 20px;
@@ -110,46 +109,47 @@
     }
     .project-item h3 {
       margin: 0 0 5px;
+      font-size: 18px;
     }
     .project-item p {
       margin: 0;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
   <div class="content">
     <h1>Привет, я Александра</h1>
-    <p>Обо мне: Я веб-разработчик и дизайнер, создаю интерактивные 3D-миры. Моя страсть — технологии и искусство.</p>
-    <p>Навыки: HTML, CSS, JavaScript, Three.js, Blender, UI/UX</p>
-    <p>Портфолио:</p>
-    <div class="portfolio-item">Проект 1: 3D-рабочая комната (см. справа)</div>
-    <div class="portfolio-item">Проект 2: Интерактивный дизайн (скоро)</div>
+    <p>Я веб-разработчик и 3D-дизайнер. Создаю интерактивные миры, где технологии встречаются с искусством.</p>
+    <p>Навыки: HTML, CSS, JavaScript, Three.js, Blender</p>
+    <p>Мои работы:</p>
+    <div class="portfolio-item">3D-рабочая комната</div>
+    <div class="portfolio-item">Интерактивный дизайн (скоро)</div>
   </div>
 
-  <!-- Всплывающее окно для фотоаппарата -->
+  <!-- Модальное окно для фотоаппарата -->
   <div id="modal-camera" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal('modal-camera')">×</span>
       <img src="https://sashaart7.github.io/aleksandraart.github.io/sashaphoto.jpg" alt="Обо мне">
-      <p>Обо мне: Меня зовут Александра, я творческая личность, которая обожает исследовать мир через код и дизайн. Моя работа — это сочетание функциональности и эстетики, вдохновленное природой и современными технологиями. В свободное время я люблю фотографировать и создавать 3D-модели.</p>
+      <p>Обо мне: Я Александра, и моя страсть — создавать цифровые миры. Я сочетаю навыки программирования и дизайна, чтобы вдохновлять и удивлять. Люблю экспериментировать с 3D и находить новые способы самовыражения через технологии.</p>
     </div>
   </div>
 
-  <!-- Всплывающее окно для компьютера -->
+  <!-- Модальное окно для компьютера -->
   <div id="modal-computer" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal('modal-computer')">×</span>
       <h2>Мои проекты</h2>
       <div class="project-list">
         <div class="project-item">
-          <h3>Проект 1: 3D-комната</h3>
-          <p>Интерактивная 3D-комната, созданная с использованием Three.js и GLTF-моделей.</p>
+          <h3>3D-комната</h3>
+          <p>Интерактивная сцена с мебелью, созданная с помощью Three.js и Blender.</p>
         </div>
         <div class="project-item">
-          <h3>Проект 2: Веб-дизайн</h3>
-          <p>Современный веб-дизайн с акцентом на пользовательский опыт и анимации.</p>
+          <h3>Веб-дизайн</h3>
+          <p>Минималистичный сайт с акцентом на UX и анимации.</p>
         </div>
-        <!-- Добавьте больше проектов здесь -->
       </div>
     </div>
   </div>
@@ -158,7 +158,7 @@
   <script src="https://unpkg.com/three@0.134.0/examples/js/loaders/GLTFLoader.js"></script>
   <script src="https://unpkg.com/three@0.134.0/examples/js/controls/OrbitControls.js"></script>
   <script>
-    // Создаем сцену
+    // Сцена
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -168,28 +168,25 @@
     document.body.appendChild(renderer.domElement);
 
     // Освещение
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(5, 10, 5);
     directionalLight.castShadow = true;
-    directionalLight.shadow.mapSize.width = 1024;
-    directionalLight.shadow.mapSize.height = 1024;
     scene.add(directionalLight);
 
     // Пол
     const floorGeometry = new THREE.PlaneGeometry(20, 20);
-    const floorMaterial = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, roughness: 0.8 });
+    const floorMaterial = new THREE.MeshStandardMaterial({ color: 0xcccccc, roughness: 0.8 });
     const floor = new THREE.Mesh(floorGeometry, floorMaterial);
     floor.rotation.x = -Math.PI / 2;
     floor.receiveShadow = true;
     scene.add(floor);
 
-    // Загрузка GLTF-моделей
+    // Загрузка моделей
     const loader = new THREE.GLTFLoader();
     let chair, computer, desk, cameraObj, wheat;
 
-    // Функция для загрузки моделей
     function loadModel(url, name, position, scale) {
       loader.load(
         url,
@@ -199,75 +196,71 @@
           model.position.set(position.x, position.y, position.z);
           model.castShadow = true;
           model.receiveShadow = true;
-
-          // Добавляем материал
           model.traverse((child) => {
             if (child.isMesh) {
-              if (!child.material || child.material.type === 'MeshBasicMaterial') {
-                child.material = new THREE.MeshPhongMaterial({
-                  color: name === 'chair' ? 0x8b4513 : 
-                         name === 'computer' ? 0x555555 : 
-                         name === 'desk' ? 0x8b5a2b : 
-                         name === 'camera' ? 0x333333 : 0xd2b48c,
-                  shininess: 50,
-                });
-              }
+              child.material = new THREE.MeshPhongMaterial({
+                color: name === 'chair' ? 0x8b4513 : 
+                       name === 'computer' ? 0x555555 : 
+                       name === 'desk' ? 0x8b5a2b : 
+                       name === 'camera' ? 0x333333 : 0xd2b48c,
+                shininess: 50,
+              });
             }
           });
-
           scene.add(model);
           if (name === 'chair') chair = model;
           if (name === 'computer') computer = model;
           if (name === 'desk') desk = model;
           if (name === 'camera') cameraObj = model;
           if (name === 'wheat') wheat = model;
-          console.log(`${name} успешно загружен`);
+          console.log(`${name} загружен`);
         },
-        (xhr) => console.log(`${name}: ${(xhr.loaded / xhr.total * 100).toFixed(2)}% загружено`),
+        undefined,
         (error) => console.error(`Ошибка загрузки ${name}:`, error)
       );
     }
 
-    // Загрузка моделей
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/chair.glb', 'chair', { x: -2, y: 0, z: 2 }, 1);
-    loadModel('https://sashaart7.github.io/aleksandraart.github.io/computer.glb', 'computer', { x: 0, y: 1, z: 0 }, 0.001); // Уменьшен в 1000 раз
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/computer.glb', 'computer', { x: 0, y: 0.5, z: 0 }, 0.001); // Уменьшен в 1000 раз
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/desk1.glb', 'desk', { x: 0, y: 0, z: 0 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/camera.glb', 'camera', { x: 2, y: 0.5, z: -1 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/wheat.glb', 'wheat', { x: -3, y: 0, z: -2 }, 1);
 
     // Дополнительные объекты
-    const torusGeometry = new THREE.TorusGeometry(0.5, 0.2, 16, 100);
-    const torusMaterial = new THREE.MeshPhongMaterial({ color: 0xff5555, shininess: 100 });
-    const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+    const torus = new THREE.Mesh(
+      new THREE.TorusGeometry(0.5, 0.2, 16, 100),
+      new THREE.MeshPhongMaterial({ color: 0xff5555, shininess: 100 })
+    );
     torus.position.set(3, 1, -2);
     torus.castShadow = true;
     scene.add(torus);
 
-    const sphereGeometry = new THREE.SphereGeometry(0.3, 32, 32);
-    const sphereMaterial = new THREE.MeshPhongMaterial({ color: 0x55ff55, shininess: 100 });
-    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-    sphere.position.set(-3, 2, -1);
+    const sphere = new THREE.Mesh(
+      new THREE.SphereGeometry(0.3, 32, 32),
+      new THREE.MeshPhongMaterial({ color: 0x55ff55, shininess: 100 })
+    );
+    sphere.position.set(-3, 0.3, -1);
     sphere.castShadow = true;
     scene.add(sphere);
 
-    const lampGeometry = new THREE.CylinderGeometry(0.2, 0.2, 1, 32);
-    const lampMaterial = new THREE.MeshPhongMaterial({ color: 0xffff00, shininess: 100 });
-    const lamp = new THREE.Mesh(lampGeometry, lampMaterial);
+    const lamp = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.2, 0.2, 1, 32),
+      new THREE.MeshPhongMaterial({ color: 0xffff00, shininess: 100 })
+    );
     lamp.position.set(2, 0.5, 2);
     lamp.castShadow = true;
     scene.add(lamp);
 
-    // Позиция камеры
-    camera.position.set(5, 5, 10);
-    camera.lookAt(0, 1, 0);
+    // Камера
+    camera.position.set(0, 5, 10);
+    camera.lookAt(0, 0, 0);
 
     // Управление сценой
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.screenSpacePanning = false;
-    controls.minDistance = 5;
-    controls.maxDistance = 50;
+    controls.minDistance = 2;
+    controls.maxDistance = 20;
 
     // Интерактивность
     const raycaster = new THREE.Raycaster();
@@ -278,7 +271,7 @@
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     });
 
-    // Клик для открытия модальных окон
+    // Клик для модальных окон
     window.addEventListener('click', (event) => {
       raycaster.setFromCamera(mouse, camera);
       const intersectsCamera = raycaster.intersectObject(cameraObj, true);
@@ -291,7 +284,7 @@
       }
     });
 
-    // Функция для закрытия модальных окон
+    // Закрытие модальных окон
     function closeModal(modalId) {
       document.getElementById(modalId).style.display = 'none';
     }
@@ -305,7 +298,7 @@
       if (intersectsChair.length > 0) {
         isRotatingChair = true;
         previousMouseX = event.clientX;
-        controls.enabled = false; // Отключаем управление камерой
+        controls.enabled = false;
       }
     });
     window.addEventListener('mousemove', (event) => {
@@ -317,26 +310,22 @@
     });
     window.addEventListener('mouseup', () => {
       isRotatingChair = false;
-      controls.enabled = true; // Включаем управление камерой
+      controls.enabled = true;
     });
 
     // Анимация
     function animate() {
       requestAnimationFrame(animate);
-
-      // Анимация дополнительных объектов
-      torus.rotation.x += 0.02;
-      torus.rotation.y += 0.02;
-      sphere.rotation.y += 0.015;
+      torus.rotation.x += 0.01;
+      torus.rotation.y += 0.01;
+      sphere.rotation.y += 0.01;
       lamp.position.y = 0.5 + Math.sin(Date.now() * 0.002) * 0.2;
 
-      // Эффект наведения для всех объектов, кроме стола
+      // Эффект наведения
       raycaster.setFromCamera(mouse, camera);
       const interactiveObjects = [torus, sphere, lamp, chair, computer, cameraObj, wheat];
       const intersects = raycaster.intersectObjects(interactiveObjects, true);
-      interactiveObjects.forEach(obj => {
-        obj.scale.set(1, 1, 1);
-      });
+      interactiveObjects.forEach(obj => obj.scale.set(1, 1, 1));
       if (intersects.length > 0) {
         intersects[0].object.scale.set(1.1, 1.1, 1.1);
       }
