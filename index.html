@@ -80,9 +80,9 @@
       background: #f7e7e3;
       padding: 25px;
       border-radius: 15px;
-      max-width: 700px;
-      max-height: 80vh; 
-      overflow-y: auto;
+      max-width: 900px; /* Увеличил ширину окна */
+      max-height: 90vh; /* Увеличил высоту окна */
+      overflow-y: auto; /* Прокрутка включена */
       text-align: center;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
       position: relative;
@@ -347,6 +347,22 @@
     window.addEventListener('mousemove', (event) => {
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+      // Проверка наведения для изменения курсора
+      raycaster.setFromCamera(mouse, camera);
+      const clickableObjects = [cameraObj, computer];
+      let isHoveringClickable = false;
+
+      clickableObjects.forEach(obj => {
+        if (obj) {
+          const intersects = raycaster.intersectObject(obj, true);
+          if (intersects.length > 0) {
+            isHoveringClickable = true;
+          }
+        }
+      });
+
+      document.body.style.cursor = isHoveringClickable ? 'pointer' : 'default';
     });
 
     window.addEventListener('click', (event) => {
