@@ -144,17 +144,18 @@
     .like-container {
       display: flex;
       align-items: center;
-      gap: 10px; /* Расстояние между сердцем и счетчиком */
+      gap: 5px; /* 0.5 см между сердцем и счетчиком */
       justify-content: flex-end; /* Выравнивание вправо */
-      margin-top: 10px; /* Отступ сверху от изображения */
+      margin-top: 10px; /* Отступ сверху от изображения (1 см) */
+      margin-right: 10px; /* Отступ справа от края фото (1 см) */
     }
     #heart-canvas {
-      width: 50px;
-      height: 50px;
+      width: 10px; /* Размер сердца ~1 см */
+      height: 10px;
       cursor: pointer;
     }
     #like-count {
-      font-size: 14px; /* Увеличен для читаемости */
+      font-size: 14px; /* Размер текста счетчика */
       color: #666;
     }
   </style>
@@ -560,22 +561,20 @@
       heartScene = new THREE.Scene();
       heartCamera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
       heartRenderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
-      heartRenderer.setSize(50, 50);
+      heartRenderer.setSize(10, 10); // Размер канваса 1 см
 
-      // Создание формы сердца
-      const shape = new THREE.Shape();
-      shape.moveTo(0, 0);
-      shape.bezierCurveTo(0, -0.3, -0.5, -0.5, -0.5, -0.7);
-      shape.bezierCurveTo(-0.5, -1, 0, -1, 0, -1);
-      shape.bezierCurveTo(0, -1, 0.5, -1, 0.5, -0.7);
-      shape.bezierCurveTo(0.5, -0.5, 0, -0.3, 0, 0);
-
-      const extrudeSettings = { depth: 0.2, bevelEnabled: false };
-      const heartGeometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-      const heartMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 }); // Красное сердце
-      heart = new THREE.Mesh(heartGeometry, heartMaterial);
-      heart.scale.set(2.5, 2.5, 2.5); // Чуть больше
-      heartScene.add(heart);
+      // Загрузка модели heart.glb
+      loader.load(
+        'https://sashaart7.github.io/aleksandraart.github.io/heart.glb', // Предполагаемый URL, измените, если он другой
+        (gltf) => {
+          heart = gltf.scene;
+          heart.scale.set(0.05, 0.05, 0.05); // Уменьшаем до ~1 см, настройте масштаб под модель
+          heart.position.set(0, 0, 0);
+          heartScene.add(heart);
+        },
+        undefined,
+        (error) => console.error('Ошибка загрузки heart.glb:', error)
+      );
 
       const heartLight = new THREE.DirectionalLight(0xffffff, 1);
       heartLight.position.set(0, 0, 5);
@@ -587,9 +586,9 @@
       document.getElementById('like-count').textContent = likeCount;
 
       canvas.addEventListener('click', () => {
-        if (!isAnimating) {
+        if (!isAnimating && heart) { // Проверка, что модель загрузилась
           likeCount++;
-          localStorage.setItem('likeCount', likeCount); // Сохранение в localStorage
+          localStorage.setItem('likeCount', likeCount);
           document.getElementById('like-count').textContent = likeCount;
           isAnimating = true;
           animateHeart();
@@ -611,7 +610,14 @@
         requestAnimationFrame(animateStep);
       }
 
-      heartRenderer.render(heartScene, heartCamera);
+      // Рендеринг сцены
+      function renderHeart() {
+        if (heart) {
+          heartRenderer.render(heartScene, heartCamera);
+        }
+        requestAnimationFrame(renderHeart);
+      }
+      renderHeart();
     }
   </script>
 </body>
