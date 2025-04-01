@@ -68,8 +68,6 @@
       padding: 25px;
       border-radius: 15px;
       max-width: 700px;
-      max-height: 90vh;
-      overflow-y: auto;
       text-align: center;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
       position: relative;
@@ -91,21 +89,6 @@
     }
     .close-btn:hover {
       color: #000;
-    }
-    .typewriter {
-      font-size: 16px;
-      line-height: 1.6;
-      margin: 10px 0;
-      font-weight: 300;
-      animation: typing 4s steps(40, end), blink-caret 0.75s step-end infinite;
-    }
-    @keyframes typing {
-      from { width: 0; }
-      to { width: 100%; }
-    }
-    @keyframes blink-caret {
-      from, to { border-color: transparent; }
-      50% { border-color: #333; }
     }
     .skills {
       display: flex;
@@ -170,7 +153,7 @@
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal('modal-camera')">×</span>
       <img src="https://sashaart7.github.io/aleksandraart.github.io/sashaphoto.png" alt="Обо мне">
-      <p class="typewriter">Обо мне: Я Александра, и моя страсть — создавать цифровые миры. Я сочетаю навыки программирования и дизайна, чтобы вдохновлять и удивлять. Люблю экспериментировать с 3D и находить новые способы самовыражения через технологии.</p>
+      <p>Обо мне: Я Александра, и моя страсть — создавать цифровые миры. Я сочетаю навыки программирования и дизайна, чтобы вдохновлять и удивлять. Люблю экспериментировать с 3D и находить новые способы самовыражения через технологии.</p>
     </div>
   </div>
 
@@ -187,6 +170,8 @@
           <h3>Веб-дизайн</h3>
           <p>Минималистичный сайт с акцентом на UX и анимации.</p>
         </div>
+        <div class="project-item">3D-рабочая комната</div>
+        <div class="project-item">Интерактивный дизайн (скоро)</div>
       </div>
     </div>
   </div>
@@ -194,8 +179,7 @@
   <div id="modal-macstudio" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal('modal-macstudio')">×</span>
-      <h2>Мои навыки и работы</h2>
-      <p>Навыки:</p>
+      <h2>Мои навыки</h2>
       <div class="skills">
         <!-- Веб-разработка -->
         <div class="skill-item">
@@ -303,11 +287,6 @@
           <img src="https://sashaart7.github.io/aleksandraart.github.io/chatgpt.png" alt="ChatGPT">
           <span>ChatGPT</span>
         </div>
-      </div>
-      <p>Мои работы:</p>
-      <div class="project-list">
-        <div class="project-item">3D-рабочая комната</div>
-        <div class="project-item">Интерактивный дизайн (скоро)</div>
       </div>
     </div>
   </div>
@@ -483,12 +462,6 @@
       const intersectsMacStudio = raycaster.intersectObject(macStudio, true);
       if (intersectsCamera.length > 0) {
         document.getElementById('modal-camera').style.display = 'flex';
-        setTimeout(() => {
-          const typewriter = document.querySelector('#modal-camera .typewriter');
-          typewriter.style.animation = 'none';
-          void typewriter.offsetWidth;
-          typewriter.style.animation = null;
-        }, 100);
       }
       if (intersectsComputer.length > 0) {
         document.getElementById('modal-computer').style.display = 'flex';
@@ -496,6 +469,16 @@
       if (intersectsMacStudio.length > 0) {
         document.getElementById('modal-macstudio').style.display = 'flex';
       }
+    });
+
+    // Закрытие окон кликом за пределами
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+      modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
     });
 
     function closeModal(modalId) {
