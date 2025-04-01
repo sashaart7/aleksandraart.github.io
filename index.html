@@ -80,8 +80,8 @@
       background: #f7e7e3;
       padding: 25px;
       border-radius: 15px;
-      max-width: 900px; /* Увеличил ширину окна */
-      max-height: 90vh; /* Увеличил высоту окна */
+      max-width: 1200px; /* Ещё шире для текста */
+      max-height: 95vh; /* Почти вся высота экрана */
       overflow-y: auto; /* Прокрутка включена */
       text-align: center;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
@@ -348,7 +348,6 @@
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-      // Проверка наведения для изменения курсора
       raycaster.setFromCamera(mouse, camera);
       const clickableObjects = [cameraObj, computer];
       let isHoveringClickable = false;
