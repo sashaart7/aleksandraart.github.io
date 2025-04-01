@@ -4,13 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Портфолио Александры</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     body { 
       margin: 0; 
       overflow: hidden; 
       background: #f7e7e3; /* Бежевый фон */
       color: #333; 
-      font-family: 'Arial', sans-serif; 
+      font-family: 'Montserrat', sans-serif; /* Премиум-шрифт */
     }
     canvas { 
       width: 100%; 
@@ -38,12 +39,18 @@
     h1 {
       font-size: 36px;
       margin: 0 0 15px;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
+      font-weight: 700; /* Жирный для заголовка */
+    }
+    h2 {
+      font-size: 24px;
+      font-weight: 700;
     }
     p {
       font-size: 16px;
-      line-height: 1.5;
+      line-height: 1.6;
       margin: 10px 0;
+      font-weight: 400; /* Обычный для текста */
     }
     .portfolio-item {
       margin: 10px 0;
@@ -51,6 +58,7 @@
       background: rgba(0, 0, 0, 0.05);
       border-radius: 5px;
       transition: transform 0.3s, box-shadow 0.3s;
+      font-weight: 500; /* Средний для элементов */
     }
     .portfolio-item:hover {
       transform: translateX(5px);
@@ -110,10 +118,28 @@
     .project-item h3 {
       margin: 0 0 5px;
       font-size: 18px;
+      font-weight: 700;
     }
     .project-item p {
       margin: 0;
       font-size: 14px;
+      font-weight: 400;
+    }
+    /* Переключатель музыки */
+    .music-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 2;
+      cursor: pointer;
+    }
+    .music-toggle img {
+      width: 30px;
+      height: 30px;
+      transition: opacity 0.3s;
+    }
+    .music-toggle img:hover {
+      opacity: 0.8;
     }
   </style>
 </head>
@@ -152,6 +178,16 @@
     </div>
   </div>
 
+  <!-- Переключатель музыки -->
+  <div class="music-toggle" onclick="toggleMusic()">
+    <img id="music-icon" src="https://sashaart7.github.io/aleksandraart.github.io/vkl.png" alt="Music Toggle">
+  </div>
+
+  <!-- Аудио -->
+  <audio id="background-music" loop>
+    <source src="https://sashaart7.github.io/aleksandraart.github.io/relaxing.mp3" type="audio/mpeg">
+  </audio>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://unpkg.com/three@0.134.0/examples/js/loaders/GLTFLoader.js"></script>
   <script src="https://unpkg.com/three@0.134.0/examples/js/controls/OrbitControls.js"></script>
@@ -167,7 +203,7 @@
     document.body.appendChild(renderer.domElement);
 
     // Освещение
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6); // Мягкий общий свет
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
     directionalLight.position.set(5, 10, 5);
@@ -297,7 +333,7 @@
     window.addEventListener('click', (event) => {
       raycaster.setFromCamera(mouse, camera);
       const intersectsCamera = raycaster.intersectObject(cameraObj, true);
-      const intersectsComputer = raycaster.intersectObject(computer, true); // Вернул computer
+      const intersectsComputer = raycaster.intersectObject(computer, true);
       if (intersectsCamera.length > 0) {
         document.getElementById('modal-camera').style.display = 'flex';
       }
@@ -311,6 +347,23 @@
       document.getElementById(modalId).style.display = 'none';
     }
 
+    // Управление музыкой
+    const music = document.getElementById('background-music');
+    const musicIcon = document.getElementById('music-icon');
+    let isMusicPlaying = true;
+    music.play(); // Автоматически включить музыку
+
+    function toggleMusic() {
+      if (isMusicPlaying) {
+        music.pause();
+        musicIcon.src = 'https://sashaart7.github.io/aleksandraart.github.io/vikl.png';
+      } else {
+        music.play();
+        musicIcon.src = 'https://sashaart7.github.io/aleksandraart.github.io/vkl.png';
+      }
+      isMusicPlaying = !isMusicPlaying;
+    }
+
     // Анимация
     function animate() {
       requestAnimationFrame(animate);
@@ -322,7 +375,7 @@
 
       // Плавное вращение стула туда-сюда
       if (chair) {
-        chair.rotation.y = Math.sin(Date.now() * 0.001) * 0.4; // Меньше половины круга, тихо
+        chair.rotation.y = Math.sin(Date.now() * 0.001) * 0.4;
       }
 
       // Эффект наведения (только размер)
