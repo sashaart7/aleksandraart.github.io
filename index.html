@@ -40,7 +40,7 @@
       font-size: 36px;
       margin: 0 0 15px;
       letter-spacing: 1.5px;
-      font-weight: 700; /* Жирный для заголовка */
+      font-weight: 700;
     }
     h2 {
       font-size: 24px;
@@ -50,7 +50,7 @@
       font-size: 16px;
       line-height: 1.6;
       margin: 10px 0;
-      font-weight: 400; /* Обычный для текста */
+      font-weight: 400;
     }
     .portfolio-item {
       margin: 10px 0;
@@ -58,7 +58,7 @@
       background: rgba(0, 0, 0, 0.05);
       border-radius: 5px;
       transition: transform 0.3s, box-shadow 0.3s;
-      font-weight: 500; /* Средний для элементов */
+      font-weight: 500;
     }
     .portfolio-item:hover {
       transform: translateX(5px);
@@ -88,7 +88,7 @@
       position: relative;
     }
     .modal-content img {
-      max-width: 300px; /* Уменьшенный размер фото */
+      max-width: 200px; /* Ещё меньше фото */
       height: auto;
       margin-bottom: 20px;
       border-radius: 10px;
@@ -125,7 +125,6 @@
       font-size: 14px;
       font-weight: 400;
     }
-    /* Переключатель музыки */
     .music-toggle {
       position: fixed;
       top: 20px;
@@ -140,6 +139,21 @@
     }
     .music-toggle img:hover {
       opacity: 0.8;
+    }
+    /* Эффект пишущей машинки */
+    .typewriter {
+      overflow: hidden;
+      border-right: 2px solid #333;
+      white-space: nowrap;
+      animation: typing 4s steps(40, end), blink-caret 0.75s step-end infinite;
+    }
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+    @keyframes blink-caret {
+      from, to { border-color: transparent; }
+      50% { border-color: #333; }
     }
   </style>
 </head>
@@ -157,7 +171,7 @@
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal('modal-camera')">×</span>
       <img src="https://sashaart7.github.io/aleksandraart.github.io/sashaphoto.png" alt="Обо мне">
-      <p>Обо мне: Я Александра, и моя страсть — создавать цифровые миры. Я сочетаю навыки программирования и дизайна, чтобы вдохновлять и удивлять. Люблю экспериментировать с 3D и находить новые способы самовыражения через технологии.</p>
+      <p class="typewriter">Обо мне: Я Александра, и моя страсть — создавать цифровые миры. Я сочетаю навыки программирования и дизайна, чтобы вдохновлять и удивлять. Люблю экспериментировать с 3D и находить новые способы самовыражения через технологии.</p>
     </div>
   </div>
 
@@ -184,7 +198,7 @@
   </div>
 
   <!-- Аудио -->
-  <audio id="background-music" loop>
+  <audio id="background-music" loop autoplay>
     <source src="https://sashaart7.github.io/aleksandraart.github.io/relaxing.mp3" type="audio/mpeg">
   </audio>
 
@@ -238,14 +252,22 @@
           if (name === 'chair') {
             model.traverse((child) => {
               if (child.isMesh) {
-                child.material = new THREE.MeshPhongMaterial({ color: 0xffb6c1, shininess: 50 }); // Розовый стул
+                child.material = new THREE.MeshPhongMaterial({ 
+                  color: 0xffb6c1, 
+                  shininess: 50,
+                  map: null // Отключаем текстуру
+                });
               }
             });
           }
           if (name === 'desk') {
             model.traverse((child) => {
               if (child.isMesh) {
-                child.material = new THREE.MeshPhongMaterial({ color: 0xffffff, shininess: 50 }); // Белый стол
+                child.material = new THREE.MeshPhongMaterial({ 
+                  color: 0xffffff, 
+                  shininess: 50,
+                  map: null // Отключаем текстуру
+                });
               }
             });
           }
@@ -351,7 +373,11 @@
     const music = document.getElementById('background-music');
     const musicIcon = document.getElementById('music-icon');
     let isMusicPlaying = true;
-    music.play(); // Автоматически включить музыку
+
+    // Музыка играет сразу
+    music.play().catch(error => {
+      console.log("Автопроигрывание заблокировано браузером:", error);
+    });
 
     function toggleMusic() {
       if (isMusicPlaying) {
@@ -378,7 +404,7 @@
         chair.rotation.y = Math.sin(Date.now() * 0.001) * 0.4;
       }
 
-      // Эффект наведения (только размер)
+      // Эффект наведения (очень маленький)
       raycaster.setFromCamera(mouse, camera);
       const interactiveObjects = [
         computer, macBook, macStudio, iPad, iPadStand, 
@@ -387,10 +413,10 @@
       ];
 
       interactiveObjects.forEach(obj => {
-        if (obj) { // Проверка на undefined
+        if (obj) {
           const intersects = raycaster.intersectObject(obj, true);
           const isHovered = intersects.length > 0;
-          const targetScale = isHovered ? 1.1 : 1; // Как у torus
+          const targetScale = isHovered ? 1.05 : 1; // Очень маленький эффект
           obj.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
         }
       });
