@@ -75,8 +75,8 @@
     .modal-content img {
       max-width: 150px; 
       height: auto;
+      margin-bottom: 20px;
       border-radius: 10px;
-      vertical-align: middle;
     }
     .close-btn {
       position: absolute;
@@ -141,31 +141,6 @@
     .music-toggle img:hover {
       opacity: 0.8;
     }
-    .photo-container {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      position: relative;
-    }
-    .like-container {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      right: -40px; /* Расположение справа от фото */
-    }
-    #heart-canvas {
-      width: 30px; /* Размер как в Instagram */
-      height: 30px;
-      cursor: pointer;
-    }
-    #like-count {
-      font-size: 16px; /* Размер шрифта счётчика */
-      color: #333;
-      font-weight: 500;
-    }
   </style>
 </head>
 <body>
@@ -177,13 +152,7 @@
   <div id="modal-camera" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal('modal-camera')">×</span>
-      <div class="photo-container">
-        <img src="https://sashaart7.github.io/aleksandraart.github.io/sashaphoto.png" alt="Обо мне">
-        <div class="like-container">
-          <canvas id="heart-canvas"></canvas>
-          <span id="like-count">0</span>
-        </div>
-      </div>
+      <img src="https://sashaart7.github.io/aleksandraart.github.io/sashaphoto.png" alt="Обо мне">
       <p>Обо мне: Я Александра, и моя страсть — создавать цифровые миры. Я сочетаю навыки программирования и дизайна, чтобы вдохновлять и удивлять. Люблю экспериментировать с 3D и находить новые способы самовыражения через технологии.</p>
     </div>
   </div>
@@ -212,6 +181,7 @@
       <span class="close-btn" onclick="closeModal('modal-macstudio')">×</span>
       <h2>Мои навыки</h2>
       <div class="skills">
+        <!-- Веб-разработка -->
         <div class="skill-item">
           <img src="https://sashaart7.github.io/aleksandraart.github.io/html.png" alt="HTML">
           <span>HTML</span>
@@ -244,6 +214,7 @@
           <img src="https://sashaart7.github.io/aleksandraart.github.io/Framer.png" alt="Framer">
           <span>Framer</span>
         </div>
+        <!-- Дизайн и прототипирование -->
         <div class="skill-item">
           <img src="https://sashaart7.github.io/aleksandraart.github.io/Adobe Illustrator.png" alt="Adobe Illustrator">
           <span>Adobe Illustrator</span>
@@ -268,6 +239,7 @@
           <img src="https://sashaart7.github.io/aleksandraart.github.io/Canva.png" alt="Canva">
           <span>Canva</span>
         </div>
+        <!-- 3D и скульптинг -->
         <div class="skill-item">
           <img src="https://sashaart7.github.io/aleksandraart.github.io/Blender.png" alt="Blender">
           <span>Blender</span>
@@ -284,6 +256,7 @@
           <img src="https://sashaart7.github.io/aleksandraart.github.io/nomad sculpt.png" alt="Nomad Sculpt">
           <span>Nomad Sculpt</span>
         </div>
+        <!-- Анимация и видео -->
         <div class="skill-item">
           <img src="https://sashaart7.github.io/aleksandraart.github.io/aftereffects.png" alt="After Effects">
           <span>After Effects</span>
@@ -300,6 +273,7 @@
           <img src="https://sashaart7.github.io/aleksandraart.github.io/procreate dreams.png" alt="Procreate Dreams">
           <span>Procreate Dreams</span>
         </div>
+        <!-- Игровая разработка -->
         <div class="skill-item">
           <img src="https://sashaart7.github.io/aleksandraart.github.io/unity.png" alt="Unity">
           <span>Unity</span>
@@ -308,6 +282,7 @@
           <img src="https://sashaart7.github.io/aleksandraart.github.io/Construct 3.png" alt="Construct 3">
           <span>Construct 3</span>
         </div>
+        <!-- Другое -->
         <div class="skill-item">
           <img src="https://sashaart7.github.io/aleksandraart.github.io/chatgpt.png" alt="ChatGPT">
           <span>ChatGPT</span>
@@ -328,7 +303,6 @@
   <script src="https://unpkg.com/three@0.134.0/examples/js/loaders/GLTFLoader.js"></script>
   <script src="https://unpkg.com/three@0.134.0/examples/js/controls/OrbitControls.js"></script>
   <script>
-    // Основная сцена
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -343,6 +317,9 @@
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
     directionalLight.position.set(5, 10, 5);
     directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.width = 1024;
+    directionalLight.shadow.mapSize.height = 1024;
+    directionalLight.shadow.bias = -0.0001;
     scene.add(directionalLight);
 
     const floorGeometry = new THREE.PlaneGeometry(20, 20);
@@ -370,7 +347,10 @@
             model.traverse((child) => {
               if (child.isMesh) {
                 const pinkTexture = textureLoader.load('https://sashaart7.github.io/aleksandraart.github.io/pink_texture.png');
-                child.material = new THREE.MeshPhongMaterial({ map: pinkTexture, shininess: 50 });
+                child.material = new THREE.MeshPhongMaterial({
+                  map: pinkTexture,
+                  shininess: 50
+                });
               }
             });
           }
@@ -378,7 +358,10 @@
             model.traverse((child) => {
               if (child.isMesh) {
                 const whiteTexture = textureLoader.load('https://sashaart7.github.io/aleksandraart.github.io/white_texture.png');
-                child.material = new THREE.MeshPhongMaterial({ map: whiteTexture, shininess: 50 });
+                child.material = new THREE.MeshPhongMaterial({
+                  map: whiteTexture,
+                  shininess: 50
+                });
               }
             });
           }
@@ -479,7 +462,6 @@
       const intersectsMacStudio = raycaster.intersectObject(macStudio, true);
       if (intersectsCamera.length > 0) {
         document.getElementById('modal-camera').style.display = 'flex';
-        initHeartScene();
       }
       if (intersectsComputer.length > 0) {
         document.getElementById('modal-computer').style.display = 'flex';
@@ -489,6 +471,7 @@
       }
     });
 
+    // Закрытие окон кликом за пределами
     const modals = document.querySelectorAll('.modal');
     modals.forEach(modal => {
       modal.addEventListener('click', (event) => {
@@ -540,7 +523,11 @@
       }
 
       raycaster.setFromCamera(mouse, camera);
-      const interactiveObjects = [computer, macBook, macStudio, iPad, airPodsMax, cameraObj, wheat, torus, sphere, lamp];
+      const interactiveObjects = [
+        computer, macBook, macStudio, iPad, airPodsMax, 
+        cameraObj, wheat, torus, sphere, lamp
+      ];
+
       interactiveObjects.forEach(obj => {
         if (obj) {
           const intersects = raycaster.intersectObject(obj, true);
@@ -560,84 +547,6 @@
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
-
-    // Логика для 3D сердца и лайков
-    let heartScene, heartCamera, heartRenderer, heart;
-    let isAnimating = false;
-    let likeCount = localStorage.getItem('likeCount') ? parseInt(localStorage.getItem('likeCount')) : 0;
-
-    function initHeartScene() {
-      const canvas = document.getElementById('heart-canvas');
-      heartScene = new THREE.Scene();
-      heartCamera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-      heartRenderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
-      heartRenderer.setSize(30, 30); // Размер канваса
-
-      // Загрузка модели heart.glb
-      loader.load(
-        'https://sashaart7.github.io/aleksandraart.github.io/heart.glb',
-        (gltf) => {
-          heart = gltf.scene;
-          heart.scale.set(5, 5, 5); // Масштаб для соответствия размеру
-          heart.position.set(0, 0, 0);
-
-          // Окрашивание в красный цвет
-          heart.traverse((child) => {
-            if (child.isMesh) {
-              child.material = new THREE.MeshPhongMaterial({ color: 0xff0000 }); // Красный цвет
-            }
-          });
-
-          heartScene.add(heart);
-          console.log('Сердце загружено');
-        },
-        undefined,
-        (error) => console.error('Ошибка загрузки heart.glb:', error)
-      );
-
-      const heartLight = new THREE.DirectionalLight(0xffffff, 1);
-      heartLight.position.set(0, 0, 5);
-      heartScene.add(heartLight);
-
-      heartCamera.position.z = 5;
-
-      // Загрузка сохранённого значения лайков
-      document.getElementById('like-count').textContent = likeCount;
-
-      canvas.addEventListener('click', () => {
-        if (!isAnimating && heart) { // Проверка, что сердце загружено
-          likeCount++;
-          localStorage.setItem('likeCount', likeCount); // Сохранение в localStorage
-          document.getElementById('like-count').textContent = likeCount;
-          isAnimating = true;
-          animateHeart();
-        }
-      });
-
-      function animateHeart() {
-        let rotation = 0;
-        const animateStep = () => {
-          if (rotation < Math.PI * 2) {
-            rotation += 0.1;
-            heart.rotation.y = rotation;
-            heartRenderer.render(heartScene, heartCamera);
-            requestAnimationFrame(animateStep);
-          } else {
-            isAnimating = false;
-          }
-        };
-        requestAnimationFrame(animateStep);
-      }
-
-      // Рендеринг сцены
-      function renderHeart() {
-        if (heart) {
-          heartRenderer.render(heartScene, heartCamera);
-        }
-        requestAnimationFrame(renderHeart);
-      }
-      renderHeart();
-    }
   </script>
 </body>
 </html>
