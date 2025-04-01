@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Портфолио Александры</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
   <style>
     body { 
       margin: 0; 
       overflow: hidden; 
       background: #f7e7e3; /* Бежевый фон */
       color: #333; 
-      font-family: 'Montserrat', sans-serif; /* Премиум-шрифт */
+      font-family: 'Poppins', sans-serif; /* Модный шрифт */
     }
     canvas { 
       width: 100%; 
@@ -50,7 +50,7 @@
       font-size: 16px;
       line-height: 1.6;
       margin: 10px 0;
-      font-weight: 400;
+      font-weight: 300; /* Лёгкий вес для текста */
     }
     .portfolio-item {
       margin: 10px 0;
@@ -81,14 +81,14 @@
       padding: 25px;
       border-radius: 15px;
       max-width: 700px;
-      max-height: 85vh;
-      overflow-y: auto;
+      max-height: 80vh; /* Уменьшил высоту для скролла */
+      overflow-y: auto; /* Включил скролл */
       text-align: center;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
       position: relative;
     }
     .modal-content img {
-      max-width: 200px; /* Ещё меньше фото */
+      max-width: 200px; /* Маленькое фото */
       height: auto;
       margin-bottom: 20px;
       border-radius: 10px;
@@ -123,7 +123,7 @@
     .project-item p {
       margin: 0;
       font-size: 14px;
-      font-weight: 400;
+      font-weight: 300;
     }
     .music-toggle {
       position: fixed;
@@ -140,7 +140,6 @@
     .music-toggle img:hover {
       opacity: 0.8;
     }
-    /* Эффект пишущей машинки */
     .typewriter {
       overflow: hidden;
       border-right: 2px solid #333;
@@ -198,7 +197,7 @@
   </div>
 
   <!-- Аудио -->
-  <audio id="background-music" loop autoplay>
+  <audio id="background-music" loop>
     <source src="https://sashaart7.github.io/aleksandraart.github.io/relaxing.mp3" type="audio/mpeg">
   </audio>
 
@@ -255,7 +254,10 @@
                 child.material = new THREE.MeshPhongMaterial({ 
                   color: 0xffb6c1, 
                   shininess: 50,
-                  map: null // Отключаем текстуру
+                  map: null, // Отключаем текстуру
+                  specularMap: null,
+                  normalMap: null,
+                  roughnessMap: null // Убираем все возможные карты
                 });
               }
             });
@@ -266,7 +268,10 @@
                 child.material = new THREE.MeshPhongMaterial({ 
                   color: 0xffffff, 
                   shininess: 50,
-                  map: null // Отключаем текстуру
+                  map: null, // Отключаем текстуру
+                  specularMap: null,
+                  normalMap: null,
+                  roughnessMap: null // Убираем все возможные карты
                 });
               }
             });
@@ -372,11 +377,18 @@
     // Управление музыкой
     const music = document.getElementById('background-music');
     const musicIcon = document.getElementById('music-icon');
-    let isMusicPlaying = true;
+    let isMusicPlaying = false;
 
-    // Музыка играет сразу
-    music.play().catch(error => {
-      console.log("Автопроигрывание заблокировано браузером:", error);
+    // Попытка автопроигрывания после загрузки страницы
+    window.addEventListener('load', () => {
+      music.play().then(() => {
+        isMusicPlaying = true;
+        musicIcon.src = 'https://sashaart7.github.io/aleksandraart.github.io/vkl.png';
+      }).catch(error => {
+        console.log("Автопроигрывание заблокировано:", error);
+        isMusicPlaying = false;
+        musicIcon.src = 'https://sashaart7.github.io/aleksandraart.github.io/vikl.png';
+      });
     });
 
     function toggleMusic() {
@@ -401,15 +413,14 @@
 
       // Плавное вращение стула туда-сюда
       if (chair) {
-        chair.rotation.y = Math.sin(Date.now() * 0.001) * 0.4;
+        chair(rotation.y = Math.sin(Date.now() * 0.001) * 0.4;
       }
 
-      // Эффект наведения (очень маленький)
+      // Эффект наведения (очень маленький, кроме исключений)
       raycaster.setFromCamera(mouse, camera);
       const interactiveObjects = [
-        computer, macBook, macStudio, iPad, iPadStand, 
-        airPodsMax, airPodsMaxStand, tripod, cameraObj, wheat,
-        torus, sphere, lamp
+        computer, macBook, macStudio, iPad, airPodsMax, 
+        cameraObj, wheat, torus, sphere, lamp
       ];
 
       interactiveObjects.forEach(obj => {
