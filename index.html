@@ -130,7 +130,7 @@
   <div id="modal-camera" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal('modal-camera')">×</span>
-      <img src="https://sashaart7.github.io/aleksandraart.github.io/sashaphoto.jpg" alt="Обо мне">
+      <img src="https://sashaart7.github.io/aleksandraart.github.io/sashaphoto.png" alt="Обо мне">
       <p>Обо мне: Я Александра, и моя страсть — создавать цифровые миры. Я сочетаю навыки программирования и дизайна, чтобы вдохновлять и удивлять. Люблю экспериментировать с 3D и находить новые способы самовыражения через технологии.</p>
     </div>
   </div>
@@ -185,7 +185,7 @@
 
     // Загрузка моделей
     const loader = new THREE.GLTFLoader();
-    let chair, computer, desk, cameraObj, wheat;
+    let chair, computer, desk, cameraObj, wheat, airPodsMax, airPodsMaxStand, iPad, iPadStand, macStudio, macBook, tripod;
 
     function loadModel(url, name, position, scale) {
       loader.load(
@@ -218,6 +218,13 @@
           if (name === 'desk') desk = model;
           if (name === 'camera') cameraObj = model;
           if (name === 'wheat') wheat = model;
+          if (name === 'airPodsMax') airPodsMax = model;
+          if (name === 'airPodsMaxStand') airPodsMaxStand = model;
+          if (name === 'iPad') iPad = model;
+          if (name === 'iPadStand') iPadStand = model;
+          if (name === 'macStudio') macStudio = model;
+          if (name === 'macBook') macBook = model;
+          if (name === 'tripod') tripod = model;
           console.log(`${name} загружен`);
         },
         undefined,
@@ -225,11 +232,19 @@
       );
     }
 
+    // Загрузка всех моделей с вашими позициями
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/chair.glb', 'chair', { x: -2, y: 0, z: 2 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/computer.glb', 'computer', { x: 0, y: 0.35, z: 0 }, 1.2);
-    loadModel('https://sashaart7.github.io/aleksandraart.github.io/desk1.glb', 'desk', { x: 0, y: 0, z: 0 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/desk.glb', 'desk', { x: 0, y: 0, z: 0 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/camera.glb', 'camera', { x: 2, y: 0.5, z: -1 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/wheat.glb', 'wheat', { x: -3, y: 0, z: -2 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/AirPods Max.glb', 'airPodsMax', { x: 1, y: 0.5, z: 1 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/AirPods Max stand.glb', 'airPodsMaxStand', { x: 1, y: 0, z: 1 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/iPad.glb', 'iPad', { x: -1, y: 0.5, z: 0 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/iPad stand.glb', 'iPadStand', { x: -1, y: 0, z: 0 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/Mac Studio.glb', 'macStudio', { x: 0, y: 0.5, z: -1 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/MacBook.glb', 'macBook', { x: 0, y: 0.35, z: 0 }, 1.2);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/tripod.glb', 'tripod', { x: 2, y: 0, z: -2 }, 1);
 
     // Примитивы
     const torus = new THREE.Mesh(
@@ -280,11 +295,11 @@
     window.addEventListener('click', (event) => {
       raycaster.setFromCamera(mouse, camera);
       const intersectsCamera = raycaster.intersectObject(cameraObj, true);
-      const intersectsComputer = raycaster.intersectObject(computer, true);
+      const intersectsMacBook = raycaster.intersectObject(macBook, true);
       if (intersectsCamera.length > 0) {
         document.getElementById('modal-camera').style.display = 'flex';
       }
-      if (intersectsComputer.length > 0) {
+      if (intersectsMacBook.length > 0) {
         document.getElementById('modal-computer').style.display = 'flex';
       }
     });
