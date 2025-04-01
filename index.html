@@ -75,7 +75,7 @@
     .modal-content img {
       max-width: 150px; 
       height: auto;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       border-radius: 10px;
     }
     .close-btn {
@@ -142,10 +142,11 @@
       opacity: 0.8;
     }
     .like-container {
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 10px;
-      margin-top: 10px;
+      gap: 5px;
+      justify-content: flex-end;
+      margin-top: 5px;
     }
     #heart-canvas {
       width: 50px;
@@ -153,8 +154,8 @@
       cursor: pointer;
     }
     #like-count {
-      font-size: 16px;
-      font-weight: 500;
+      font-size: 12px;
+      color: #666;
     }
   </style>
 </head>
@@ -168,11 +169,11 @@
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal('modal-camera')">×</span>
       <img src="https://sashaart7.github.io/aleksandraart.github.io/sashaphoto.png" alt="Обо мне">
-      <p>Обо мне: Я Александра, и моя страсть — создавать цифровые миры. Я сочетаю навыки программирования и дизайна, чтобы вдохновлять и удивлять. Люблю экспериментировать с 3D и находить новые способы самовыражения через технологии.</p>
       <div class="like-container">
         <canvas id="heart-canvas"></canvas>
         <span id="like-count">0</span>
       </div>
+      <p>Обо мне: Я Александра, и моя страсть — создавать цифровые миры. Я сочетаю навыки программирования и дизайна, чтобы вдохновлять и удивлять. Люблю экспериментировать с 3D и находить новые способы самовыражения через технологии.</p>
     </div>
   </div>
 
@@ -467,7 +468,7 @@
       const intersectsMacStudio = raycaster.intersectObject(macStudio, true);
       if (intersectsCamera.length > 0) {
         document.getElementById('modal-camera').style.display = 'flex';
-        initHeartScene(); // Инициализация сцены сердца при открытии окна
+        initHeartScene();
       }
       if (intersectsComputer.length > 0) {
         document.getElementById('modal-computer').style.display = 'flex';
@@ -552,7 +553,7 @@
     // Логика для 3D сердца и лайков
     let heartScene, heartCamera, heartRenderer, heart;
     let isAnimating = false;
-    let likeCount = 0;
+    let likeCount = localStorage.getItem('likeCount') ? parseInt(localStorage.getItem('likeCount')) : 0;
 
     function initHeartScene() {
       const canvas = document.getElementById('heart-canvas');
@@ -571,9 +572,9 @@
 
       const extrudeSettings = { depth: 0.2, bevelEnabled: false };
       const heartGeometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-      const heartMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
+      const heartMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 }); // Красное сердце
       heart = new THREE.Mesh(heartGeometry, heartMaterial);
-      heart.scale.set(2, 2, 2);
+      heart.scale.set(2.5, 2.5, 2.5); // Чуть больше
       heartScene.add(heart);
 
       const heartLight = new THREE.DirectionalLight(0xffffff, 1);
@@ -582,9 +583,13 @@
 
       heartCamera.position.z = 5;
 
+      // Загрузка сохранённого значения лайков
+      document.getElementById('like-count').textContent = likeCount;
+
       canvas.addEventListener('click', () => {
         if (!isAnimating) {
           likeCount++;
+          localStorage.setItem('likeCount', likeCount); // Сохранение в localStorage
           document.getElementById('like-count').textContent = likeCount;
           isAnimating = true;
           animateHeart();
