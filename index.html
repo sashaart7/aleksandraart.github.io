@@ -9,9 +9,9 @@
     body { 
       margin: 0; 
       overflow: hidden; 
-      background: #f7e7e3; /* Бежевый фон */
+      background: #f7e7e3; 
       color: #333; 
-      font-family: 'Poppins', sans-serif; /* Модный шрифт */
+      font-family: 'Poppins', sans-serif; 
     }
     canvas { 
       width: 100%; 
@@ -50,7 +50,7 @@
       font-size: 16px;
       line-height: 1.6;
       margin: 10px 0;
-      font-weight: 300; /* Лёгкий вес для текста */
+      font-weight: 300;
     }
     .portfolio-item {
       margin: 10px 0;
@@ -81,14 +81,14 @@
       padding: 25px;
       border-radius: 15px;
       max-width: 700px;
-      max-height: 80vh; /* Уменьшил высоту для скролла */
-      overflow-y: auto; /* Включил скролл */
+      max-height: 80vh; 
+      overflow-y: auto;
       text-align: center;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
       position: relative;
     }
     .modal-content img {
-      max-width: 200px; /* Маленькое фото */
+      max-width: 150px; 
       height: auto;
       margin-bottom: 20px;
       border-radius: 10px;
@@ -191,12 +191,10 @@
     </div>
   </div>
 
-  <!-- Переключатель музыки -->
   <div class="music-toggle" onclick="toggleMusic()">
     <img id="music-icon" src="https://sashaart7.github.io/aleksandraart.github.io/vkl.png" alt="Music Toggle">
   </div>
 
-  <!-- Аудио -->
   <audio id="background-music" loop>
     <source src="https://sashaart7.github.io/aleksandraart.github.io/relaxing.mp3" type="audio/mpeg">
   </audio>
@@ -205,17 +203,15 @@
   <script src="https://unpkg.com/three@0.134.0/examples/js/loaders/GLTFLoader.js"></script>
   <script src="https://unpkg.com/three@0.134.0/examples/js/controls/OrbitControls.js"></script>
   <script>
-    // Сцена
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    renderer.setClearColor(0xf7e7e3); // Бежевый фон для рендера
+    renderer.setClearColor(0xf7e7e3);
     document.body.appendChild(renderer.domElement);
 
-    // Освещение
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -226,15 +222,13 @@
     directionalLight.shadow.bias = -0.0001;
     scene.add(directionalLight);
 
-    // Пол
     const floorGeometry = new THREE.PlaneGeometry(20, 20);
-    const floorMaterial = new THREE.MeshStandardMaterial({ color: 0xd9c2a7, roughness: 0.8 }); // Бежевый пол
+    const floorMaterial = new THREE.MeshStandardMaterial({ color: 0xd9c2a7, roughness: 0.8 });
     const floor = new THREE.Mesh(floorGeometry, floorMaterial);
     floor.rotation.x = -Math.PI / 2;
     floor.receiveShadow = true;
     scene.add(floor);
 
-    // Загрузка моделей
     const loader = new THREE.GLTFLoader();
     let chair, computer, desk, cameraObj, wheat, airPodsMax, airPodsMaxStand, iPad, iPadStand, macStudio, macBook, tripod;
 
@@ -251,13 +245,15 @@
           if (name === 'chair') {
             model.traverse((child) => {
               if (child.isMesh) {
-                child.material = new THREE.MeshPhongMaterial({ 
+                child.material = new THREE.MeshPhongMaterial({
                   color: 0xffb6c1, 
                   shininess: 50,
-                  map: null, // Отключаем текстуру
+                  map: null,
                   specularMap: null,
                   normalMap: null,
-                  roughnessMap: null // Убираем все возможные карты
+                  roughnessMap: null,
+                  metalnessMap: null,
+                  envMap: null
                 });
               }
             });
@@ -265,13 +261,15 @@
           if (name === 'desk') {
             model.traverse((child) => {
               if (child.isMesh) {
-                child.material = new THREE.MeshPhongMaterial({ 
+                child.material = new THREE.MeshPhongMaterial({
                   color: 0xffffff, 
                   shininess: 50,
-                  map: null, // Отключаем текстуру
+                  map: null,
                   specularMap: null,
                   normalMap: null,
-                  roughnessMap: null // Убираем все возможные карты
+                  roughnessMap: null,
+                  metalnessMap: null,
+                  envMap: null
                 });
               }
             });
@@ -297,7 +295,6 @@
       );
     }
 
-    // Загрузка всех моделей с твоими позициями
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/chair.glb', 'chair', { x: 0, y: 0, z: 0 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/computer.glb', 'computer', { x: 0, y: 0, z: 0 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/desk.glb', 'desk', { x: 0, y: 0, z: 0 }, 1);
@@ -311,7 +308,6 @@
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/MacBook.glb', 'macBook', { x: 0, y: 0, z: 0 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/tripod.glb', 'tripod', { x: 0, y: 0, z: 0 }, 1);
 
-    // Примитивы
     const torus = new THREE.Mesh(
       new THREE.TorusGeometry(0.5, 0.2, 16, 100),
       new THREE.MeshPhongMaterial({ color: 0xff5555, shininess: 100 })
@@ -336,18 +332,15 @@
     lamp.castShadow = true;
     scene.add(lamp);
 
-    // Камера
     camera.position.set(0, 5, 10);
     camera.lookAt(0, 0, 0);
 
-    // Управление
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.minDistance = 2;
     controls.maxDistance = 20;
 
-    // Интерактивность
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
@@ -356,30 +349,32 @@
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     });
 
-    // Клик для модальных окон
     window.addEventListener('click', (event) => {
       raycaster.setFromCamera(mouse, camera);
       const intersectsCamera = raycaster.intersectObject(cameraObj, true);
       const intersectsComputer = raycaster.intersectObject(computer, true);
       if (intersectsCamera.length > 0) {
         document.getElementById('modal-camera').style.display = 'flex';
+        setTimeout(() => {
+          const typewriter = document.querySelector('#modal-camera .typewriter');
+          typewriter.style.animation = 'none';
+          void typewriter.offsetWidth;
+          typewriter.style.animation = null;
+        }, 100);
       }
       if (intersectsComputer.length > 0) {
         document.getElementById('modal-computer').style.display = 'flex';
       }
     });
 
-    // Закрытие модальных окон
     function closeModal(modalId) {
       document.getElementById(modalId).style.display = 'none';
     }
 
-    // Управление музыкой
     const music = document.getElementById('background-music');
     const musicIcon = document.getElementById('music-icon');
     let isMusicPlaying = false;
 
-    // Попытка автопроигрывания после загрузки страницы
     window.addEventListener('load', () => {
       music.play().then(() => {
         isMusicPlaying = true;
@@ -402,21 +397,17 @@
       isMusicPlaying = !isMusicPlaying;
     }
 
-    // Анимация
     function animate() {
       requestAnimationFrame(animate);
 
-      // Вращение примитивов
       torus.rotation.x += 0.01;
       torus.rotation.y += 0.01;
       sphere.rotation.y += 0.01;
 
-      // Плавное вращение стула туда-сюда
       if (chair) {
-        chair(rotation.y = Math.sin(Date.now() * 0.001) * 0.4;
+        chair.rotation.y = Math.sin(Date.now() * 0.001) * 0.4;
       }
 
-      // Эффект наведения (очень маленький, кроме исключений)
       raycaster.setFromCamera(mouse, camera);
       const interactiveObjects = [
         computer, macBook, macStudio, iPad, airPodsMax, 
@@ -427,7 +418,7 @@
         if (obj) {
           const intersects = raycaster.intersectObject(obj, true);
           const isHovered = intersects.length > 0;
-          const targetScale = isHovered ? 1.05 : 1; // Очень маленький эффект
+          const targetScale = isHovered ? 1.02 : 1;
           obj.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
         }
       });
@@ -437,7 +428,6 @@
     }
     animate();
 
-    // Адаптация размера
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
