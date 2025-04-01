@@ -568,7 +568,7 @@
         'https://sashaart7.github.io/aleksandraart.github.io/heart.glb', // Предполагаемый URL, измените, если он другой
         (gltf) => {
           heart = gltf.scene;
-          heart.scale.set(0.05, 0.05, 0.05); // Уменьшаем до ~1 см, настройте масштаб под модель
+          heart.scale.set(1, 1, 1); // Уменьшаем до ~1 см, настройте масштаб под модель
           heart.position.set(0, 0, 0);
           heartScene.add(heart);
         },
