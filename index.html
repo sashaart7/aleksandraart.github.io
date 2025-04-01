@@ -342,15 +342,21 @@
       sphere.rotation.y += 0.01;
       lamp.position.y = 0.5 + Math.sin(Date.now() * 0.002) * 0.2;
 
-      // Эффект наведения
+      // Эффект наведения для всех объектов, кроме chair и desk
       raycaster.setFromCamera(mouse, camera);
-      const interactiveObjects = [torus, sphere, lamp, cameraObj, wheat];
+      const interactiveObjects = [
+        computer, macBook, macStudio, iPad, iPadStand, 
+        airPodsMax, airPodsMaxStand, tripod, cameraObj, wheat,
+        torus, sphere, lamp
+      ];
 
       interactiveObjects.forEach(obj => {
-        const intersects = raycaster.intersectObject(obj, true);
-        const isHovered = intersects.length > 0;
-        const targetScale = isHovered ? 1.1 : 1;
-        obj.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
+        if (obj) { // Проверка на undefined
+          const intersects = raycaster.intersectObject(obj, true);
+          const isHovered = intersects.length > 0;
+          const targetScale = isHovered ? 1.15 : 1;
+          obj.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
+        }
       });
 
       controls.update();
