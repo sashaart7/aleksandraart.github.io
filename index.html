@@ -80,7 +80,7 @@
       position: relative;
     }
     .modal-content img {
-      max-width: 100%;
+      max-width: 300px; /* Уменьшенный размер фото */
       height: auto;
       margin-bottom: 20px;
       border-radius: 10px;
@@ -169,12 +169,12 @@
     // Освещение
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6); // Мягкий общий свет
     scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8); // Уменьшил интенсивность
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
     directionalLight.position.set(5, 10, 5);
     directionalLight.castShadow = true;
     directionalLight.shadow.mapSize.width = 1024;
     directionalLight.shadow.mapSize.height = 1024;
-    directionalLight.shadow.bias = -0.0001; // Убираем странные артефакты
+    directionalLight.shadow.bias = -0.0001;
     scene.add(directionalLight);
 
     // Пол
@@ -234,7 +234,7 @@
       );
     }
 
-    // Загрузка всех моделей с вашими позициями
+    // Загрузка всех моделей с твоими позициями
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/chair.glb', 'chair', { x: 0, y: 0, z: 0 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/computer.glb', 'computer', { x: 0, y: 0, z: 0 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/desk.glb', 'desk', { x: 0, y: 0, z: 0 }, 1);
@@ -297,11 +297,11 @@
     window.addEventListener('click', (event) => {
       raycaster.setFromCamera(mouse, camera);
       const intersectsCamera = raycaster.intersectObject(cameraObj, true);
-      const intersectsMacBook = raycaster.intersectObject(macBook, true);
+      const intersectsComputer = raycaster.intersectObject(computer, true); // Вернул computer
       if (intersectsCamera.length > 0) {
         document.getElementById('modal-camera').style.display = 'flex';
       }
-      if (intersectsMacBook.length > 0) {
+      if (intersectsComputer.length > 0) {
         document.getElementById('modal-computer').style.display = 'flex';
       }
     });
