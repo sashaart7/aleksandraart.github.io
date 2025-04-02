@@ -75,8 +75,8 @@
     .modal-content img {
       max-width: 150px; 
       height: auto;
+      margin-bottom: 20px;
       border-radius: 10px;
-      vertical-align: middle;
     }
     .close-btn {
       position: absolute;
@@ -141,74 +141,42 @@
     .music-toggle img:hover {
       opacity: 0.8;
     }
-    .photo-container {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      position: relative;
-    }
-    .like-container {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      position: absolute;
-      top: 50%;
-      transform: translatorsY(-50%);
-      right: -40px;
-    }
-    #heart-canvas {
-      width: 30px;
-      height: 30px;
-      cursor: pointer;
-    }
-    #like-count {
-      font-size: 16px;
-      color: #333;
-      font-weight: 500;
-    }
+    /* Новые стили для видео-превью */
     .project-list {
-      max-height: 400px;
-      overflow-y: auto;
+      margin-top: 20px;
     }
-    .project-item {
-      margin-bottom: 20px;
-    }
-    .video-preview {
+    .video-preview-container {
       position: relative;
       width: 200px;
-      height: 120px;
+      height: 150px;
       margin: 10px auto;
       overflow: hidden;
-      border-radius: 8px;
+      border-radius: 10px;
       transition: transform 0.3s ease;
     }
-    .video-preview video {
+    .video-preview-container:hover {
+      transform: scale(1.1);
+    }
+    .video-preview {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: none;
     }
-    .video-overlay {
+    .video-preview-container:hover .video-preview {
+      display: block;
+    }
+    .preview-image {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.2);
+      object-fit: cover;
       z-index: 1;
     }
-    .video-preview:hover {
-      transform: scale(1.1);
-    }
-    .video-preview:hover video {
-      display: block;
-    }
-    .video-preview:hover #slice-video {
-      animation: playVideo 0s forwards;
-    }
-    @keyframes playVideo {
-      from { }
-      to { }
+    .video-preview-container:hover .preview-image {
+      display: none;
     }
   </style>
 </head>
@@ -221,13 +189,7 @@
   <div id="modal-camera" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal('modal-camera')">×</span>
-      <div class="photo-container">
-        <img src="https://sashaart7.github.io/aleksandraart.github.io/sashaphoto.png" alt="Обо мне">
-        <div class="like-container">
-          <canvas id="heart-canvas"></canvas>
-          <span id="like-count">0</span>
-        </div>
-      </div>
+      <img src="https://sashaart7.github.io/aleksandraart.github.io/sashaphoto.png" alt="Обо мне">
       <p>Обо мне: Я Александра, и моя страсть — создавать цифровые миры. Я сочетаю навыки программирования и дизайна, чтобы вдохновлять и удивлять. Люблю экспериментировать с 3D и находить новые способы самовыражения через технологии.</p>
     </div>
   </div>
@@ -237,6 +199,12 @@
       <span class="close-btn" onclick="closeModal('modal-computer')">×</span>
       <h2>Мои проекты</h2>
       <div class="project-list">
+        <div class="video-preview-container">
+          <img src="slicescreen.jpg" alt="SliceChain Wallet Preview" class="preview-image">
+          <video class="video-preview" loop muted>
+            <source src="Slice.MP4" type="video/mp4">
+          </video>
+        </div>
         <div class="project-item">
           <h3>3D-комната</h3>
           <p>Интерактивная сцена с мебелью, созданная с помощью Three.js и Blender.</p>
@@ -244,16 +212,6 @@
         <div class="project-item">
           <h3>Веб-дизайн</h3>
           <p>Минималистичный сайт с акцентом на UX и анимации.</p>
-        </div>
-        <div class="project-item">
-          <h3>SliceChain Wallet</h3>
-          <div class="video-preview">
-            <video id="slice-video" muted loop>
-              <source src="Slice.MP4" type="video/mp4">
-              Ваш браузер не поддерживает видео.
-            </video>
-            <div class="video-overlay"></div>
-          </div>
         </div>
         <div class="project-item">3D-рабочая комната</div>
         <div class="project-item">Интерактивный дизайн (скоро)</div>
@@ -266,6 +224,7 @@
       <span class="close-btn" onclick="closeModal('modal-macstudio')">×</span>
       <h2>Мои навыки</h2>
       <div class="skills">
+        <!-- Веб-разработка -->
         <div class="skill-item">
           <img src="https://sashaart7.github.io/aleksandraart.github.io/html.png" alt="HTML">
           <span>HTML</span>
@@ -298,6 +257,7 @@
           <img src="https://sashaart7.github.io/aleksandraart.github.io/Framer.png" alt="Framer">
           <span>Framer</span>
         </div>
+        <!-- Дизайн и прототипирование -->
         <div class="skill-item">
           <img src="https://sashaart7.github.io/aleksandraart.github.io/Adobe Illustrator.png" alt="Adobe Illustrator">
           <span>Adobe Illustrator</span>
@@ -322,6 +282,7 @@
           <img src="https://sashaart7.github.io/aleksandraart.github.io/Canva.png" alt="Canva">
           <span>Canva</span>
         </div>
+        <!-- 3D и скульптинг -->
         <div class="skill-item">
           <img src="https://sashaart7.github.io/aleksandraart.github.io/Blender.png" alt="Blender">
           <span>Blender</span>
@@ -338,6 +299,7 @@
           <img src="https://sashaart7.github.io/aleksandraart.github.io/nomad sculpt.png" alt="Nomad Sculpt">
           <span>Nomad Sculpt</span>
         </div>
+        <!-- Анимация и видео -->
         <div class="skill-item">
           <img src="https://sashaart7.github.io/aleksandraart.github.io/aftereffects.png" alt="After Effects">
           <span>After Effects</span>
@@ -354,6 +316,7 @@
           <img src="https://sashaart7.github.io/aleksandraart.github.io/procreate dreams.png" alt="Procreate Dreams">
           <span>Procreate Dreams</span>
         </div>
+        <!-- Игровая разработка -->
         <div class="skill-item">
           <img src="https://sashaart7.github.io/aleksandraart.github.io/unity.png" alt="Unity">
           <span>Unity</span>
@@ -362,6 +325,7 @@
           <img src="https://sashaart7.github.io/aleksandraart.github.io/Construct 3.png" alt="Construct 3">
           <span>Construct 3</span>
         </div>
+        <!-- Другое -->
         <div class="skill-item">
           <img src="https://sashaart7.github.io/aleksandraart.github.io/chatgpt.png" alt="ChatGPT">
           <span>ChatGPT</span>
@@ -396,6 +360,9 @@
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
     directionalLight.position.set(5, 10, 5);
     directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.width = 1024;
+    directionalLight.shadow.mapSize.height = 1024;
+    directionalLight.shadow.bias = -0.0001;
     scene.add(directionalLight);
 
     const floorGeometry = new THREE.PlaneGeometry(20, 20);
@@ -423,7 +390,10 @@
             model.traverse((child) => {
               if (child.isMesh) {
                 const pinkTexture = textureLoader.load('https://sashaart7.github.io/aleksandraart.github.io/pink_texture.png');
-                child.material = new THREE.MeshPhongMaterial({ map: pinkTexture, shininess: 50 });
+                child.material = new THREE.MeshPhongMaterial({
+                  map: pinkTexture,
+                  shininess: 50
+                });
               }
             });
           }
@@ -431,7 +401,10 @@
             model.traverse((child) => {
               if (child.isMesh) {
                 const whiteTexture = textureLoader.load('https://sashaart7.github.io/aleksandraart.github.io/white_texture.png');
-                child.material = new THREE.MeshPhongMaterial({ map: whiteTexture, shininess: 50 });
+                child.material = new THREE.MeshPhongMaterial({
+                  map: whiteTexture,
+                  shininess: 50
+                });
               }
             });
           }
@@ -532,7 +505,6 @@
       const intersectsMacStudio = raycaster.intersectObject(macStudio, true);
       if (intersectsCamera.length > 0) {
         document.getElementById('modal-camera').style.display = 'flex';
-        initHeartScene();
       }
       if (intersectsComputer.length > 0) {
         document.getElementById('modal-computer').style.display = 'flex';
@@ -542,6 +514,7 @@
       }
     });
 
+    // Закрытие окон кликом за пределами
     const modals = document.querySelectorAll('.modal');
     modals.forEach(modal => {
       modal.addEventListener('click', (event) => {
@@ -581,6 +554,19 @@
       isMusicPlaying = !isMusicPlaying;
     }
 
+    // Управление воспроизведением видео при наведении
+    const videoContainers = document.querySelectorAll('.video-preview-container');
+    videoContainers.forEach(container => {
+      const video = container.querySelector('.video-preview');
+      container.addEventListener('mouseenter', () => {
+        video.play();
+      });
+      container.addEventListener('mouseleave', () => {
+        video.pause();
+        video.currentTime = 0; // Сброс на начало
+      });
+    });
+
     function animate() {
       requestAnimationFrame(animate);
 
@@ -593,7 +579,11 @@
       }
 
       raycaster.setFromCamera(mouse, camera);
-      const interactiveObjects = [computer, macBook, macStudio, iPad, airPodsMax, cameraObj, wheat, torus, sphere, lamp];
+      const interactiveObjects = [
+        computer, macBook, macStudio, iPad, airPodsMax, 
+        cameraObj, wheat, torus, sphere, lamp
+      ];
+
       interactiveObjects.forEach(obj => {
         if (obj) {
           const intersects = raycaster.intersectObject(obj, true);
@@ -612,97 +602,6 @@
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    let heartScene, heartCamera, heartRenderer, heart;
-    let isAnimating = false;
-    let likeCount = localStorage.getItem('likeCount') ? parseInt(localStorage.getItem('likeCount')) : 0;
-
-    function initHeartScene() {
-      const canvas = document.getElementById('heart-canvas');
-      heartScene = new THREE.Scene();
-      heartCamera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-      heartRenderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
-      heartRenderer.setSize(30, 30);
-
-      loader.load(
-        'https://sashaart7.github.io/aleksandraart.github.io/heart.glb',
-        (gltf) => {
-          heart = gltf.scene;
-          heart.scale.set(5, 5, 5);
-          heart.position.set(0, 0, 0);
-
-          heart.traverse((child) => {
-            if (child.isMesh) {
-              child.material = new THREE.MeshPhongMaterial({ color: 0xff0000 });
-            }
-          });
-
-          heartScene.add(heart);
-          console.log('Сердце загружено');
-        },
-        undefined,
-        (error) => console.error('Ошибка загрузки heart.glb:', error)
-      );
-
-      const heartLight = new THREE.DirectionalLight(0xffffff, 1);
-      heartLight.position.set(0, 0, 5);
-      heartScene.add(heartLight);
-
-      heartCamera.position.z = 5;
-
-      document.getElementById('like-count').textContent = likeCount;
-
-      canvas.addEventListener('click', () => {
-        if (!isAnimating && heart) {
-          likeCount++;
-          localStorage.setItem('likeCount', likeCount);
-          document.getElementById('like-count').textContent = likeCount;
-          isAnimating = true;
-          animateHeart();
-        }
-      });
-
-      function animateHeart() {
-        let rotation = 0;
-        const animateStep = () => {
-          if (rotation < Math.PI * 2) {
-            rotation += 0.1;
-            heart.rotation.y = rotation;
-            heartRenderer.render(heartScene, heartCamera);
-            requestAnimationFrame(animateStep);
-          } else {
-            isAnimating = false;
-          }
-        };
-        requestAnimationFrame(animateStep);
-      }
-
-      function renderHeart() {
-        if (heart) {
-          heartRenderer.render(heartScene, heartCamera);
-        }
-        requestAnimationFrame(renderHeart);
-      }
-      renderHeart();
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const videoPreview = document.querySelector('.video-preview');
-      const video = document.getElementById('slice-video');
-
-      if (videoPreview && video) {
-        videoPreview.addEventListener('mouseenter', () => {
-          video.play().catch(error => {
-            console.log("Ошибка воспроизведения видео:", error);
-          });
-        });
-
-        videoPreview.addEventListener('mouseleave', () => {
-          video.pause();
-          video.currentTime = 0;
-        });
-      }
     });
   </script>
 </body>
