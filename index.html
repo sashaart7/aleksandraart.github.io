@@ -81,7 +81,7 @@
     .close-btn {
       position: absolute;
       top: 15px;
-:{      right: 15px;
+      right: 15px;
       font-size: 28px;
       cursor: pointer;
       color: #555;
@@ -141,14 +141,14 @@
     .music-toggle img:hover {
       opacity: 0.8;
     }
-    /* Стили для видео-превью */
+    /* Новые стили для видео-превью */
     .project-list {
       margin-top: 20px;
     }
     .video-preview-container {
       position: relative;
-      width: 300px; /* Увеличил ширину для прямоугольного формата */
-      height: 169px; /* Соотношение 16:9, можно настроить под ваши файлы */
+      width: 200px;
+      height: 150px;
       margin: 10px auto;
       overflow: hidden;
       border-radius: 10px;
@@ -160,9 +160,8 @@
     .video-preview {
       width: 100%;
       height: 100%;
-      object-fit: contain; /* Сохраняет пропорции без обрезки */
+      object-fit: cover;
       display: none;
-      background: #000; /* Черный фон для видео, чтобы не было пустых участков */
     }
     .video-preview-container:hover .video-preview {
       display: block;
@@ -173,9 +172,8 @@
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: contain; /* Сохраняет пропорции без обрезки */
+      object-fit: cover;
       z-index: 1;
-      background: #000; /* Черный фон для изображения */
     }
     .video-preview-container:hover .preview-image {
       display: none;
