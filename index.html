@@ -8,7 +8,7 @@
   <style>
     body { 
       margin: 0; 
-      overflow: hidden; 
+      overflow-x: hidden; /* Предотвращает горизонтальный скролл */
       background: #f7e7e3; 
       color: #333; 
       font-family: 'Poppins', sans-serif; 
@@ -32,6 +32,8 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
       opacity: 1;
       animation: fadeOut 3s ease forwards 2s;
+      max-width: 90%; /* Ограничиваем ширину для мобильных */
+      text-align: center;
     }
     @keyframes fadeOut {
       from { opacity: 1; }
@@ -42,14 +44,12 @@
       margin: 0 0 15px;
       letter-spacing: 1.5px;
       font-weight: 700;
-      text-align: center;
     }
     p {
       font-size: 16px;
       line-height: 1.6;
       margin: 10px 0;
       font-weight: 300;
-      text-align: center;
     }
     .modal {
       display: none;
@@ -62,15 +62,17 @@
       z-index: 10;
       justify-content: center;
       align-items: center;
+      overflow-y: auto; /* Скролл для длинного контента */
     }
     .modal-content {
       background: #f7e7e3;
-      padding: 25px;
+      padding: 20px;
       border-radius: 15px;
-      max-width: 700px;
+      max-width: 90%; /* Адаптация ширины модального окна */
       text-align: center;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
       position: relative;
+      margin: 10px; /* Отступы для маленьких экранов */
     }
     .modal-content img {
       max-width: 150px; 
@@ -94,7 +96,7 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
+      gap: 15px; /* Уменьшенный отступ для компактности */
       margin-top: 20px;
     }
     .skill-item {
@@ -103,8 +105,8 @@
       width: 60px;
     }
     .skill-item img {
-      width: 50px;
-      height: 50px;
+      width: 40px; /* Уменьшено для мобильных */
+      height: 40px;
       transition: transform 0.3s;
     }
     .skill-item img:hover {
@@ -128,8 +130,8 @@
     }
     .music-toggle {
       position: fixed;
-      top: 20px;
-      right: 20px;
+      top: 10px;
+      right: 10px;
       z-index: 2;
       cursor: pointer;
     }
@@ -141,14 +143,13 @@
     .music-toggle img:hover {
       opacity: 0.8;
     }
-    /* Обновленные стили для видео */
     .project-list {
       margin-top: 20px;
     }
     .video-preview-container {
       position: relative;
-      width: 320px; /* Размер для хорошей видимости */
-      height: 180px; /* Соотношение 16:9 */
+      width: 320px;
+      height: 180px; /* 16:9 для десктопа */
       margin: 10px auto;
       overflow: hidden;
       border-radius: 10px;
@@ -160,7 +161,79 @@
     .video-preview {
       width: 100%;
       height: 100%;
-      object-fit: contain; /* Сохраняет пропорции без обрезки */
+      object-fit: contain;
+    }
+
+    /* Медиа-запросы для адаптации */
+    @media (max-width: 768px) { /* Планшеты и мобильные устройства */
+      h1 {
+        font-size: 28px; /* Уменьшаем заголовок */
+      }
+      p {
+        font-size: 14px; /* Уменьшаем текст */
+      }
+      .modal-content {
+        padding: 15px;
+        max-height: 90vh; /* Ограничиваем высоту с учетом скролла */
+        overflow-y: auto;
+      }
+      .video-preview-container {
+        width: 100%; /* Полная ширина на маленьких экранах */
+        height: auto; /* Автоматическая высота для сохранения пропорций */
+        max-width: 320px; /* Ограничение максимальной ширины */
+      }
+      .skill-item {
+        width: 50px;
+      }
+      .skill-item img {
+        width: 35px;
+        height: 35px;
+      }
+      .skill-item span {
+        font-size: 10px;
+        padding: 3px 8px;
+      }
+    }
+
+    @media (max-width: 480px) { /* Мобильные устройства */
+      h1 {
+        font-size: 24px;
+      }
+      p {
+        font-size: 12px;
+      }
+      .content {
+        padding: 15px;
+      }
+      .modal-content {
+        padding: 10px;
+      }
+      .close-btn {
+        font-size: 24px;
+        top: 10px;
+        right: 10px;
+      }
+      .video-preview-container {
+        max-width: 100%; /* Полная ширина для маленьких экранов */
+      }
+      .skill-item {
+        width: 45px;
+      }
+      .skill-item img {
+        width: 30px;
+        height: 30px;
+      }
+    }
+
+    @media (orientation: landscape) and (max-height: 500px) { /* Горизонтальная ориентация на низких экранах */
+      .modal-content {
+        max-height: 80vh; /* Уменьшаем высоту для горизонтальных устройств */
+        padding: 15px;
+      }
+      .video-preview-container {
+        width: 50%; /* Уменьшаем ширину для горизонтального вида */
+        max-width: 300px;
+      }
     }
   </style>
 </head>
@@ -207,7 +280,6 @@
       <span class="close-btn" onclick="closeModal('modal-macstudio')">×</span>
       <h2>Мои навыки</h2>
       <div class="skills">
-        <!-- Веб-разработка -->
         <div class="skill-item">
           <img src="https://sashaart7.github.io/aleksandraart.github.io/html.png" alt="HTML">
           <span>HTML</span>
@@ -240,7 +312,6 @@
           <img src="https://sashaart7.github.io/aleksandraart.github.io/Framer.png" alt="Framer">
           <span>Framer</span>
         </div>
-        <!-- Дизайн и прототипирование -->
         <div class="skill-item">
           <img src="https://sashaart7.github.io/aleksandraart.github.io/Adobe Illustrator.png" alt="Adobe Illustrator">
           <span>Adobe Illustrator</span>
@@ -265,7 +336,6 @@
           <img src="https://sashaart7.github.io/aleksandraart.github.io/Canva.png" alt="Canva">
           <span>Canva</span>
         </div>
-        <!-- 3D и скульптинг -->
         <div class="skill-item">
           <img src="https://sashaart7.github.io/aleksandraart.github.io/Blender.png" alt="Blender">
           <span>Blender</span>
@@ -282,7 +352,6 @@
           <img src="https://sashaart7.github.io/aleksandraart.github.io/nomad sculpt.png" alt="Nomad Sculpt">
           <span>Nomad Sculpt</span>
         </div>
-        <!-- Анимация и видео -->
         <div class="skill-item">
           <img src="https://sashaart7.github.io/aleksandraart.github.io/aftereffects.png" alt="After Effects">
           <span>After Effects</span>
@@ -299,7 +368,6 @@
           <img src="https://sashaart7.github.io/aleksandraart.github.io/procreate dreams.png" alt="Procreate Dreams">
           <span>Procreate Dreams</span>
         </div>
-        <!-- Игровая разработка -->
         <div class="skill-item">
           <img src="https://sashaart7.github.io/aleksandraart.github.io/unity.png" alt="Unity">
           <span>Unity</span>
@@ -308,7 +376,6 @@
           <img src="https://sashaart7.github.io/aleksandraart.github.io/Construct 3.png" alt="Construct 3">
           <span>Construct 3</span>
         </div>
-        <!-- Другое -->
         <div class="skill-item">
           <img src="https://sashaart7.github.io/aleksandraart.github.io/chatgpt.png" alt="ChatGPT">
           <span>ChatGPT</span>
@@ -461,9 +528,15 @@
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
-    window.addEventListener('mousemove', (event) => {
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    function onInteraction(event) {
+      event.preventDefault(); // Предотвращаем стандартное поведение для тач-устройств
+      if (event.type === 'touchstart') {
+        mouse.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.touches[0].clientY / window.innerHeight) * 2 + 1;
+      } else {
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      }
 
       raycaster.setFromCamera(mouse, camera);
       const clickableObjects = [cameraObj, computer, macStudio];
@@ -474,33 +547,30 @@
           const intersects = raycaster.intersectObject(obj, true);
           if (intersects.length > 0) {
             isHoveringClickable = true;
+            if (event.type === 'click' || event.type === 'touchstart') {
+              if (obj === cameraObj) document.getElementById('modal-camera').style.display = 'flex';
+              if (obj === computer) document.getElementById('modal-computer').style.display = 'flex';
+              if (obj === macStudio) document.getElementById('modal-macstudio').style.display = 'flex';
+            }
           }
         }
       });
 
       document.body.style.cursor = isHoveringClickable ? 'pointer' : 'default';
-    });
+    }
 
-    window.addEventListener('click', (event) => {
-      raycaster.setFromCamera(mouse, camera);
-      const intersectsCamera = raycaster.intersectObject(cameraObj, true);
-      const intersectsComputer = raycaster.intersectObject(computer, true);
-      const intersectsMacStudio = raycaster.intersectObject(macStudio, true);
-      if (intersectsCamera.length > 0) {
-        document.getElementById('modal-camera').style.display = 'flex';
-      }
-      if (intersectsComputer.length > 0) {
-        document.getElementById('modal-computer').style.display = 'flex';
-      }
-      if (intersectsMacStudio.length > 0) {
-        document.getElementById('modal-macstudio').style.display = 'flex';
-      }
-    });
+    window.addEventListener('mousemove', onInteraction);
+    window.addEventListener('click', onInteraction);
+    window.addEventListener('touchstart', onInteraction);
 
-    // Закрытие окон кликом за пределами
     const modals = document.querySelectorAll('.modal');
     modals.forEach(modal => {
       modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+      modal.addEventListener('touchstart', (event) => {
         if (event.target === modal) {
           modal.style.display = 'none';
         }
@@ -537,7 +607,6 @@
       isMusicPlaying = !isMusicPlaying;
     }
 
-    // Управление воспроизведением видео при наведении
     const videoContainers = document.querySelectorAll('.video-preview-container');
     videoContainers.forEach(container => {
       const video = container.querySelector('.video-preview');
@@ -546,7 +615,15 @@
       });
       container.addEventListener('mouseleave', () => {
         video.pause();
-        video.currentTime = 0; // Сброс на начало
+        video.currentTime = 0;
+      });
+      container.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        video.play();
+      });
+      container.addEventListener('touchend', () => {
+        video.pause();
+        video.currentTime = 0;
       });
     });
 
