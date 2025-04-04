@@ -141,19 +141,18 @@
     .music-toggle img:hover {
       opacity: 0.8;
     }
-    /* Обновленные стили для видео-превью */
+    /* Обновленные стили для видео */
     .project-list {
       margin-top: 20px;
     }
     .video-preview-container {
       position: relative;
-      width: 320px; /* Увеличенный размер для лучшей видимости */
-      height: 180px; /* Соотношение 16:9 для прямоугольного формата */
+      width: 320px; /* Размер для хорошей видимости */
+      height: 180px; /* Соотношение 16:9 */
       margin: 10px auto;
       overflow: hidden;
       border-radius: 10px;
       transition: transform 0.3s ease;
-      background: #000; /* Черный фон для пустых областей */
     }
     .video-preview-container:hover {
       transform: scale(1.1);
@@ -162,22 +161,6 @@
       width: 100%;
       height: 100%;
       object-fit: contain; /* Сохраняет пропорции без обрезки */
-      display: none;
-    }
-    .video-preview-container:hover .video-preview {
-      display: block;
-    }
-    .preview-image {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain; /* Сохраняет пропорции без обрезки */
-      z-index: 1;
-    }
-    .video-preview-container:hover .preview-image {
-      display: none;
     }
   </style>
 </head>
@@ -201,7 +184,6 @@
       <h2>Мои проекты</h2>
       <div class="project-list">
         <div class="video-preview-container">
-          <img src="slicescreen.jpg" alt="SliceChain Wallet Preview" class="preview-image">
           <video class="video-preview" loop muted>
             <source src="Slice.MP4" type="video/mp4">
           </video>
@@ -452,9 +434,7 @@
     scene.add(torus);
 
     const sphere = new THREE.Mesh(
-      new THREE.SphereGeometry( 
-   
-0.3, 32, 32),
+      new THREE.SphereGeometry(0.3, 32, 32),
       new THREE.MeshPhongMaterial({ color: 0x55ff55, shininess: 100 })
     );
     sphere.position.set(-3, 0.3, -1);
