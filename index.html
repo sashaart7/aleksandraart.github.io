@@ -66,19 +66,25 @@
       font-weight: 300;
       color: #555;
     }
-    /* Индикатор загрузки */
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid #ff6f61;
-      border-top: 4px solid transparent;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
+    /* Индикатор загрузки в виде полоски */
+    .progress-bar {
+      width: 200px;
+      height: 10px;
+      background: #fff;
+      border-radius: 5px;
+      overflow: hidden;
       margin: 0 auto;
     }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    .progress {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, #ff6f61 25%, #fff 25%, #fff 50%, #ff6f61 50%, #ff6f61 75%, #fff 75%);
+      background-size: 40px 10px;
+      animation: moveStripes 1s linear infinite;
+    }
+    @keyframes moveStripes {
+      0% { background-position: 0 0; }
+      100% { background-position: 40px 0; }
     }
     /* Основной контент */
     .content { 
@@ -87,10 +93,7 @@
       left: 50%; 
       transform: translate(-50%, -50%);
       z-index: 1; 
-      background: rgba(255, 255, 255, 0.8); 
       padding: 20px; 
-      border-radius: 10px; 
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
       opacity: 0; 
       max-width: 90%; 
       text-align: center;
@@ -156,14 +159,14 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 30px; /* Увеличено расстояние между логотипами */
+      gap: 30px; 
       margin-top: 20px;
     }
     .skill-item {
       position: relative;
       text-align: center;
       width: 60px;
-      padding-bottom: 30px; /* Дополнительное пространство для текста */
+      padding-bottom: 30px; 
     }
     .skill-item img {
       width: 40px; 
@@ -175,7 +178,7 @@
     }
     .skill-item span {
       position: absolute;
-      bottom: 0; /* Текст прижат к нижней части контейнера */
+      bottom: 0; 
       left: 50%;
       transform: translateX(-50%);
       background: rgba(255, 255, 255, 0.9);
@@ -254,7 +257,7 @@
         pointer-events: none; 
       }
       .skills {
-        gap: 25px; /* Чуть меньше для планшетов */
+        gap: 25px; 
       }
       .skill-item {
         width: 50px;
@@ -267,6 +270,9 @@
       .skill-item span {
         font-size: 10px;
         padding: 3px 8px;
+      }
+      .progress-bar {
+        width: 150px; /* Уменьшено для планшетов */
       }
     }
 
@@ -298,7 +304,7 @@
         max-width: 100%; 
       }
       .skills {
-        gap: 20px; /* Еще меньше для мобильных */
+        gap: 20px; 
       }
       .skill-item {
         width: 45px;
@@ -307,6 +313,9 @@
       .skill-item img {
         width: 30px;
         height: 30px;
+      }
+      .progress-bar {
+        width: 120px; /* Уменьшено для мобильных */
       }
     }
 
@@ -331,13 +340,15 @@
     <div class="loader-content">
       <h1>Привет, я Александра</h1>
       <p>Я веб-разработчик и 3D-дизайнер. Создаю интерактивные миры, где технологии встречаются с искусством.</p>
-      <div class="spinner"></div>
+      <div class="progress-bar">
+        <div class="progress"></div>
+      </div>
     </div>
   </div>
 
-  <!-- Основной контент (без текста) -->
+  <!-- Основной контент (без фона и текста) -->
   <div class="content" id="main-content">
-    <!-- Текст убран -->
+    <!-- Текст и фон убраны -->
   </div>
 
   <div id="modal-camera" class="modal">
