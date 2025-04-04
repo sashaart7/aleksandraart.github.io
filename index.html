@@ -8,7 +8,7 @@
   <style>
     body { 
       margin: 0; 
-      overflow-x: hidden; /* Предотвращает горизонтальный скролл */
+      overflow-x: hidden; 
       background: #f7e7e3; 
       color: #333; 
       font-family: 'Poppins', sans-serif; 
@@ -32,7 +32,7 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
       opacity: 1;
       animation: fadeOut 3s ease forwards 2s;
-      max-width: 90%; /* Ограничиваем ширину для мобильных */
+      max-width: 90%; 
       text-align: center;
     }
     @keyframes fadeOut {
@@ -62,17 +62,17 @@
       z-index: 10;
       justify-content: center;
       align-items: center;
-      overflow-y: auto; /* Скролл для длинного контента */
+      overflow-y: auto;
     }
     .modal-content {
       background: #f7e7e3;
       padding: 20px;
       border-radius: 15px;
-      max-width: 90%; /* Адаптация ширины модального окна */
+      max-width: 90%; 
       text-align: center;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
       position: relative;
-      margin: 10px; /* Отступы для маленьких экранов */
+      margin: 10px; 
     }
     .modal-content img {
       max-width: 150px; 
@@ -96,7 +96,7 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 15px; /* Уменьшенный отступ для компактности */
+      gap: 15px; 
       margin-top: 20px;
     }
     .skill-item {
@@ -105,7 +105,7 @@
       width: 60px;
     }
     .skill-item img {
-      width: 40px; /* Уменьшено для мобильных */
+      width: 40px; 
       height: 40px;
       transition: transform 0.3s;
     }
@@ -149,7 +149,7 @@
     .video-preview-container {
       position: relative;
       width: 320px;
-      height: 180px; /* 16:9 для десктопа */
+      height: 180px; 
       margin: 10px auto;
       overflow: hidden;
       border-radius: 10px;
@@ -162,25 +162,29 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
+      display: block; /* Видео всегда видно */
     }
 
     /* Медиа-запросы для адаптации */
     @media (max-width: 768px) { /* Планшеты и мобильные устройства */
       h1 {
-        font-size: 28px; /* Уменьшаем заголовок */
+        font-size: 28px; 
       }
       p {
-        font-size: 14px; /* Уменьшаем текст */
+        font-size: 14px; 
       }
       .modal-content {
         padding: 15px;
-        max-height: 90vh; /* Ограничиваем высоту с учетом скролла */
+        max-height: 90vh; 
         overflow-y: auto;
       }
       .video-preview-container {
-        width: 100%; /* Полная ширина на маленьких экранах */
-        height: auto; /* Автоматическая высота для сохранения пропорций */
-        max-width: 320px; /* Ограничение максимальной ширины */
+        width: 100%; 
+        height: auto; 
+        max-width: 320px; 
+      }
+      .video-preview {
+        pointer-events: none; /* Убираем интерактивность */
       }
       .skill-item {
         width: 50px;
@@ -214,7 +218,7 @@
         right: 10px;
       }
       .video-preview-container {
-        max-width: 100%; /* Полная ширина для маленьких экранов */
+        max-width: 100%; 
       }
       .skill-item {
         width: 45px;
@@ -225,13 +229,13 @@
       }
     }
 
-    @media (orientation: landscape) and (max-height: 500px) { /* Горизонтальная ориентация на низких экранах */
+    @media (orientation: landscape) and (max-height: 500px) { 
       .modal-content {
-        max-height: 80vh; /* Уменьшаем высоту для горизонтальных устройств */
+        max-height: 80vh; 
         padding: 15px;
       }
       .video-preview-container {
-        width: 50%; /* Уменьшаем ширину для горизонтального вида */
+        width: 50%; 
         max-width: 300px;
       }
     }
@@ -257,7 +261,7 @@
       <h2>Мои проекты</h2>
       <div class="project-list">
         <div class="video-preview-container">
-          <video class="video-preview" loop muted>
+          <video class="video-preview" loop muted autoplay playsinline>
             <source src="Slice.MP4" type="video/mp4">
           </video>
         </div>
@@ -529,7 +533,7 @@
     const mouse = new THREE.Vector2();
 
     function onInteraction(event) {
-      event.preventDefault(); // Предотвращаем стандартное поведение для тач-устройств
+      event.preventDefault();
       if (event.type === 'touchstart') {
         mouse.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(event.touches[0].clientY / window.innerHeight) * 2 + 1;
@@ -607,25 +611,21 @@
       isMusicPlaying = !isMusicPlaying;
     }
 
-    const videoContainers = document.querySelectorAll('.video-preview-container');
-    videoContainers.forEach(container => {
-      const video = container.querySelector('.video-preview');
-      container.addEventListener('mouseenter', () => {
-        video.play();
+    // Управление видео только для десктопов
+    if (window.innerWidth > 768) {
+      const videoContainers = document.querySelectorAll('.video-preview-container');
+      videoContainers.forEach(container => {
+        const video = container.querySelector('.video-preview');
+        video.pause(); // Останавливаем видео по умолчанию на десктопе
+        container.addEventListener('mouseenter', () => {
+          video.play();
+        });
+        container.addEventListener('mouseleave', () => {
+          video.pause();
+          video.currentTime = 0;
+        });
       });
-      container.addEventListener('mouseleave', () => {
-        video.pause();
-        video.currentTime = 0;
-      });
-      container.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        video.play();
-      });
-      container.addEventListener('touchend', () => {
-        video.pause();
-        video.currentTime = 0;
-      });
-    });
+    }
 
     function animate() {
       requestAnimationFrame(animate);
