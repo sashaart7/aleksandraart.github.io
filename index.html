@@ -20,6 +20,53 @@
       top: 0; 
       left: 0; 
     }
+    /* Экран загрузки */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #f7e7e3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+    .loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .loader-content {
+      text-align: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      animation: bounceIn 1s ease;
+    }
+    @keyframes bounceIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      60% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    .loader h1 {
+      font-size: 36px;
+      margin: 0 0 10px;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+      color: #ff6f61; /* Милый коралловый цвет */
+    }
+    .loader p {
+      font-size: 16px;
+      line-height: 1.6;
+      margin: 0;
+      font-weight: 300;
+      color: #555;
+    }
+    /* Основной контент */
     .content { 
       position: absolute; 
       top: 50%; 
@@ -30,14 +77,13 @@
       padding: 20px; 
       border-radius: 10px; 
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      opacity: 1;
-      animation: fadeOut 3s ease forwards 2s;
+      opacity: 0; /* Скрыт до загрузки */
       max-width: 90%; 
       text-align: center;
+      transition: opacity 0.5s ease;
     }
-    @keyframes fadeOut {
-      from { opacity: 1; }
-      to { opacity: 0; }
+    .content.visible {
+      opacity: 1;
     }
     h1 {
       font-size: 36px;
@@ -162,11 +208,17 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      display: block; /* Видео всегда видно */
+      display: block; 
     }
 
     /* Медиа-запросы для адаптации */
-    @media (max-width: 768px) { /* Планшеты и мобильные устройства */
+    @media (max-width: 768px) { 
+      .loader h1 {
+        font-size: 28px;
+      }
+      .loader p {
+        font-size: 14px;
+      }
       h1 {
         font-size: 28px; 
       }
@@ -184,7 +236,7 @@
         max-width: 320px; 
       }
       .video-preview {
-        pointer-events: none; /* Убираем интерактивность */
+        pointer-events: none; 
       }
       .skill-item {
         width: 50px;
@@ -199,7 +251,13 @@
       }
     }
 
-    @media (max-width: 480px) { /* Мобильные устройства */
+    @media (max-width: 480px) { 
+      .loader h1 {
+        font-size: 24px;
+      }
+      .loader p {
+        font-size: 12px;
+      }
       h1 {
         font-size: 24px;
       }
@@ -242,7 +300,15 @@
   </style>
 </head>
 <body>
-  <div class="content">
+  <!-- Экран загрузки -->
+  <div class="loader" id="loader">
+    <div class="loader-content">
+      <h1>Привет, я Александра</h1>
+      <p>Я веб-разработчик и 3D-дизайнер. Создаю интерактивные миры, где технологии встречаются с искусством.</p>
+    </div>
+  </div>
+
+  <div class="content" id="main-content">
     <h1>Привет, я Александра</h1>
     <p>Я веб-разработчик и 3D-дизайнер. Создаю интерактивные миры, где технологии встречаются с искусством.</p>
   </div>
@@ -598,6 +664,17 @@
         isMusicPlaying = false;
         musicIcon.src = 'https://sashaart7.github.io/aleksandraart.github.io/vikl.png';
       });
+
+      // Управление экраном загрузки
+      setTimeout(() => {
+        const loader = document.getElementById('loader');
+        const mainContent = document.getElementById('main-content');
+        loader.classList.add('hidden');
+        mainContent.classList.add('visible');
+        setTimeout(() => {
+          loader.style.display = 'none'; // Полностью убираем после анимации
+        }, 500); // Соответствует времени transition
+      }, 2000); // Экран загрузки виден 2 секунды
     });
 
     function toggleMusic() {
@@ -611,12 +688,11 @@
       isMusicPlaying = !isMusicPlaying;
     }
 
-    // Управление видео только для десктопов
     if (window.innerWidth > 768) {
       const videoContainers = document.querySelectorAll('.video-preview-container');
       videoContainers.forEach(container => {
         const video = container.querySelector('.video-preview');
-        video.pause(); // Останавливаем видео по умолчанию на десктопе
+        video.pause(); 
         container.addEventListener('mouseenter', () => {
           video.play();
         });
