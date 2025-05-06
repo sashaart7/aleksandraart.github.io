@@ -3,23 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Портфолио Александры - Мебельный дизайн</title>
+  <title>Портфолио Александры</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
   <style>
     body { 
       margin: 0; 
       overflow-x: hidden; 
-      background: #1a1a1a; 
-      color: #fff; 
+      background: #f7e7e3; 
+      color: #333; 
       font-family: 'Poppins', sans-serif; 
     }
     canvas { 
       width: 100%; 
       height: 100vh; 
-      position: fixed; 
+      position: absolute; 
       top: 0; 
       left: 0; 
-      z-index: -1;
     }
     /* Экран загрузки */
     .loader {
@@ -28,7 +27,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: #1a1a1a;
+      background: #f7e7e3;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -43,9 +42,9 @@
     .loader-content {
       text-align: center;
       padding: 20px;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.9);
       border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       animation: bounceIn 1s ease;
     }
     @keyframes bounceIn {
@@ -65,20 +64,21 @@
       line-height: 1.6;
       margin: 0 0 20px;
       font-weight: 300;
-      color: #ccc;
+      color: #555;
     }
+    /* Индикатор загрузки в виде полоски */
     .progress-bar {
       width: 200px;
       height: 10px;
-      background: #333;
+      background: #fff;
       border-radius: 5px;
       overflow: hidden;
       margin: 0 auto;
     }
     .progress {
-      width: 100%;
+      width: 100%; /* Полная ширина для анимации полосок */
       height: 100%;
-      background: linear-gradient(90deg, #ff6f61 25%, #333 25%, #333 50%, #ff6f61 50%, #ff6f61 75%, #333 75%);
+      background: linear-gradient(90deg, #ff6f61 25%, #fff 25%, #fff 50%, #ff6f61 50%, #ff6f61 75%, #fff 75%);
       background-size: 40px 10px;
       animation: moveStripes 1s linear infinite;
     }
@@ -88,13 +88,16 @@
     }
     /* Основной контент */
     .content { 
-      position: relative;
-      padding: 50px;
-      max-width: 1200px;
-      margin: 0 auto;
-      opacity: 0;
+      position: absolute; 
+      top: 50%; 
+      left: 50%; 
+      transform: translate(-50%, -50%);
+      z-index: 1; 
+      padding: 20px; 
+      opacity: 0; 
+      max-width: 90%; 
+      text-align: center;
       transition: opacity 0.5s ease;
-      z-index: 1;
     }
     .content.visible {
       opacity: 1;
@@ -104,12 +107,6 @@
       margin: 0 0 15px;
       letter-spacing: 1.5px;
       font-weight: 700;
-      text-align: center;
-    }
-    h2 {
-      font-size: 28px;
-      margin: 40px 0 20px;
-      text-transform: uppercase;
     }
     p {
       font-size: 16px;
@@ -124,24 +121,24 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.6);
       z-index: 10;
       justify-content: center;
       align-items: center;
       overflow-y: auto;
     }
     .modal-content {
-      background: #2a2a2a;
+      background: #f7e7e3;
       padding: 20px;
       border-radius: 15px;
-      max-width: 90%;
+      max-width: 90%; 
       text-align: center;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
       position: relative;
-      margin: 10px;
+      margin: 10px; 
     }
     .modal-content img {
-      max-width: 200px;
+      max-width: 150px; 
       height: auto;
       margin-bottom: 20px;
       border-radius: 10px;
@@ -152,32 +149,48 @@
       right: 15px;
       font-size: 28px;
       cursor: pointer;
-      color: #fff;
+      color: #555;
       transition: color 0.3s;
     }
     .close-btn:hover {
-      color: #ccc;
+      color: #000;
     }
-    .portfolio-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px; 
       margin-top: 20px;
     }
-    .portfolio-item {
+    .skill-item {
       position: relative;
-      overflow: hidden;
-      border-radius: 10px;
-      transition: transform 0.3s ease;
+      text-align: center;
+      width: 60px;
+      padding-bottom: 30px; 
     }
-    .portfolio-item:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    .skill-item img {
+      width: 40px; 
+      height: 40px;
+      transition: transform 0.3s;
     }
-    .portfolio-item img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
+    .skill-item img:hover {
+      transform: scale(1.1);
+    }
+    .skill-item span {
+      position: absolute;
+      bottom: 0; 
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.9);
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      white-space: nowrap;
+    }
+    .skill-item:hover span {
+      opacity: 1;
     }
     .music-toggle {
       position: fixed;
@@ -194,27 +207,130 @@
     .music-toggle img:hover {
       opacity: 0.8;
     }
-    /* Медиа-запросы */
-    @media (max-width: 768px) {
-      .loader h1 { font-size: 28px; }
-      .loader p { font-size: 14px; }
-      h1 { font-size: 28px; }
-      h2 { font-size: 24px; }
-      p { font-size: 14px; }
-      .modal-content { padding: 15px; max-height: 90vh; overflow-y: auto; }
-      .portfolio-item img { height: 150px; }
-      .progress-bar { width: 150px; }
+    .project-list {
+      margin-top: 20px;
     }
-    @media (max-width: 480px) {
-      .loader h1 { font-size: 24px; }
-      .loader p { font-size: 12px; }
-      h1 { font-size: 24px; }
-      h2 { font-size: 20px; }
-      p { font-size: 12px; }
-      .content { padding: 15px; }
-      .modal-content { padding: 10px; }
-      .close-btn { font-size: 24px; top: 10px; right: 10px; }
-      .progress-bar { width: 120px; }
+    .video-preview-container {
+      position: relative;
+      width: 320px;
+      height: 180px; 
+      margin: 10px auto;
+      overflow: hidden;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
+    }
+    .video-preview-container:hover {
+      transform: scale(1.1);
+    }
+    .video-preview {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block; 
+    }
+
+    /* Медиа-запросы для адаптации */
+    @media (max-width: 768px) { 
+      .loader h1 {
+        font-size: 28px;
+      }
+      .loader p {
+        font-size: 14px;
+      }
+      h1 {
+        font-size: 28px; 
+      }
+      p {
+        font-size: 14px; 
+      }
+      .modal-content {
+        padding: 15px;
+        max-height: 90vh; 
+        overflow-y: auto;
+      }
+      .video-preview-container {
+        width: 100%; 
+        height: auto; 
+        max-width: 320px; 
+      }
+      .video-preview {
+        pointer-events: none; 
+      }
+      .skills {
+        gap: 25px; 
+      }
+      .skill-item {
+        width: 50px;
+        padding-bottom: 25px;
+      }
+      .skill-item img {
+        width: 35px;
+        height: 35px;
+      }
+      .skill-item span {
+        font-size: 10px;
+        padding: 3px 8px;
+      }
+      .progress-bar {
+        width: 150px;
+      }
+    }
+
+    @media (max-width: 480px) { 
+      .loader h1 {
+        font-size: 24px;
+      }
+      .loader p {
+        font-size: 12px;
+      }
+      h1 {
+        font-size: 24px;
+      }
+      p {
+        font-size: 12px;
+      }
+      .content {
+        padding: 15px;
+      }
+      .modal-content {
+        padding: 10px;
+      }
+      .close-btn {
+        font-size: 24px;
+        top: 10px;
+        right: 10px;
+      }
+      .video-preview-container {
+        max-width: 100%; 
+      }
+      .skills {
+        gap: 20px; 
+      }
+      .skill-item {
+        width: 45px;
+        padding-bottom: 20px;
+      }
+      .skill-item img {
+        width: 30px;
+        height: 30px;
+      }
+      .progress-bar {
+        width: 120px;
+      }
+    }
+
+    @media (orientation: landscape) and (max-height: 500px) { 
+      .modal-content {
+        max-height: 80vh; 
+        padding: 15px;
+      }
+      .video-preview-container {
+        width: 50%; 
+        max-width: 300px;
+      }
+      .skills {
+        gap: 25px;
+      }
     }
   </style>
 </head>
@@ -222,61 +338,160 @@
   <!-- Экран загрузки -->
   <div class="loader" id="loader">
     <div class="loader-content">
-      <h1>Александра Арт</h1>
-      <p>Создаю уникальную мебель, где дизайн встречается с функциональностью.</p>
+      <h1>Привет, я Александра</h1>
+      <p>Я веб-разработчик и 3D-дизайнер. Создаю интерактивные миры, где технологии встречаются с искусством.</p>
       <div class="progress-bar">
         <div class="progress"></div>
       </div>
     </div>
   </div>
 
-  <!-- Основной контент -->
+  <!-- Основной контент (без фона и текста) -->
   <div class="content" id="main-content">
-    <h1>Александра Арт</h1>
-    <p style="text-align: center;">Добро пожаловать в мое портфолио мебельного дизайна.</p>
-    
-    <h2>Обо мне</h2>
-    <p>Я Александра, дизайнер мебели с страстью к созданию уникальных и функциональных предметов. Моя работа сочетает современные технологии с традиционным мастерством, чтобы вдохновлять и удивлять.</p>
-    
-    <h2>Портфолио</h2>
-    <div class="portfolio-grid">
-      <div class="portfolio-item">
-        <img src="https://via.placeholder.com/300x200?text=Стул" alt="Стул">
-      </div>
-      <div class="portfolio-item">
-        <img src="https://via.placeholder.com/300x200?text=Стол" alt="Стол">
-      </div>
-      <div class="portfolio-item">
-        <img src="https://via.placeholder.com/300x200?text=Полка" alt="Полка">
-      </div>
-    </div>
-    
-    <h2>Контакты</h2>
-    <p>Email: contact@aleksandraart.com</p>
-    <p>Телефон: +123 456 7890</p>
-    <p>Следите за мной: <a href="#" style="color: #ff6f61;">Instagram</a> | <a href="#" style="color: #ff6f61;">Pinterest</a></p>
+    <!-- Текст и фон убраны -->
   </div>
 
-  <!-- Модальные окна -->
-  <div id="modal-chair" class="modal">
+  <div id="modal-camera" class="modal">
     <div class="modal-content">
-      <span class="close-btn" onclick="closeModal('modal-chair')">×</span>
-      <img src="https://via.placeholder.com/200?text=Стул" alt="Стул">
-      <h2>Дизайн стула</h2>
-      <p>Элегантный стул, созданный с использованием экологичных материалов. Идеально подходит для современных интерьеров.</p>
+      <span class="close-btn" onclick="closeModal('modal-camera')">×</span>
+      <img src="https://sashaart7.github.io/aleksandraart.github.io/sashaphoto.png" alt="Обо мне">
+      <p>Обо мне: Я Александра, и моя страсть — создавать цифровые миры. Я сочетаю навыки программирования и дизайна, чтобы вдохновлять и удивлять. Люблю экспериментировать с 3D и находить новые способы самовыражения через технологии.</p>
     </div>
   </div>
 
-  <div id="modal-table" class="modal">
+  <div id="modal-computer" class="modal">
     <div class="modal-content">
-      <span class="close-btn" onclick="closeModal('modal-table')">×</span>
-      <img src="https://via.placeholder.com/200?text=Стол" alt="Стол">
-      <h2>Дизайн стола</h2>
-      <p>Минималистичный стол с акцентом на функциональность и долговечность.</p>
+      <span class="close-btn" onclick="closeModal('modal-computer')">×</span>
+      <h2>Мои проекты</h2>
+      <div class="project-list">
+        <div class="video-preview-container">
+          <video class="video-preview" loop muted autoplay playsinline>
+            <source src="https://sashaart7.github.io/aleksandraart.github.io/Slice.MP4" type="video/mp4">
+          </video>
+        </div>
+        <div class="project-item">
+          <h3>3D-комната</h3>
+          <p>Интерактивная сцена с мебелью, созданная с помощью Three.js и Blender.</p>
+        </div>
+        <div class="project-item">
+          <h3>Веб-дизайн</h3>
+          <p>Минималистичный сайт с акцентом на UX и анимации.</p>
+        </div>
+        <div class="project-item">3D-рабочая комната</div>
+        <div class="project-item">Интерактивный дизайн (скоро)</div>
+      </div>
     </div>
   </div>
 
-  <!-- Музыка -->
+  <div id="modal-macstudio" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('modal-macstudio')">×</span>
+      <h2>Мои навыки</h2>
+      <div class="skills">
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/html.png" alt="HTML">
+          <span>HTML</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/css.png" alt="CSS">
+          <span>CSS</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/java.png" alt="Java">
+          <span>Java</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/React Native.png" alt="React Native">
+          <span>React Native</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/Threejs.png" alt="Three.js">
+          <span>Three.js</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/GitHub.png" alt="GitHub">
+          <span>GitHub</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/Tilda.png" alt="Tilda">
+          <span>Tilda</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/Framer.png" alt="Framer">
+          <span>Framer</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/Adobe Illustrator.png" alt="Adobe Illustrator">
+          <span>Adobe Illustrator</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/Adobe XD-Photoroom.png" alt="Adobe XD">
+          <span>Adobe XD</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/photoshop.png" alt="Photoshop">
+          <span>Photoshop</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/figma.png" alt="Figma">
+          <span>Figma</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/Sketch-Photoroom.png" alt="Sketch">
+          <span>Sketch</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/Canva.png" alt="Canva">
+          <span>Canva</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/Blender.png" alt="Blender">
+          <span>Blender</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/cinema 4d.png" alt="Cinema 4D">
+          <span>Cinema 4D</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/ZBrush.png" alt="ZBrush">
+          <span>ZBrush</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/nomad sculpt.png" alt="Nomad Sculpt">
+          <span>Nomad Sculpt</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/aftereffects.png" alt="After Effects">
+          <span>After Effects</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/premiere pro.png" alt="Premiere Pro">
+          <span>Premiere Pro</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/procreate.png" alt="Procreate">
+          <span>Procreate</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/procreate dreams.png" alt="Procreate Dreams">
+          <span>Procreate Dreams</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/unity.png" alt="Unity">
+          <span>Unity</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/Construct 3.png" alt="Construct 3">
+          <span>Construct 3</span>
+        </div>
+        <div class="skill-item">
+          <img src="https://sashaart7.github.io/aleksandraart.github.io/chatgpt.png" alt="ChatGPT">
+          <span>ChatGPT</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="music-toggle" onclick="toggleMusic()">
     <img id="music-icon" src="https://sashaart7.github.io/aleksandraart.github.io/vkl.png" alt="Music Toggle">
   </div>
@@ -285,41 +500,39 @@
     <source src="https://sashaart7.github.io/aleksandraart.github.io/relaxing.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Скрипты -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://unpkg.com/three@0.134.0/examples/js/loaders/GLTFLoader.js"></script>
   <script src="https://unpkg.com/three@0.134.0/examples/js/controls/OrbitControls.js"></script>
   <script>
-    // Настройка сцены
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.setClearColor(0xf7e7e3);
     document.body.appendChild(renderer.domElement);
 
-    // Освещение
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
     directionalLight.position.set(5, 10, 5);
     directionalLight.castShadow = true;
     directionalLight.shadow.mapSize.width = 1024;
     directionalLight.shadow.mapSize.height = 1024;
+    directionalLight.shadow.bias = -0.0001;
     scene.add(directionalLight);
 
-    // Пол
     const floorGeometry = new THREE.PlaneGeometry(20, 20);
-    const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.8 });
+    const floorMaterial = new THREE.MeshStandardMaterial({ color: 0xd9c2a7, roughness: 0.8 });
     const floor = new THREE.Mesh(floorGeometry, floorMaterial);
     floor.rotation.x = -Math.PI / 2;
     floor.receiveShadow = true;
     scene.add(floor);
 
-    // Загрузка моделей
     const loader = new THREE.GLTFLoader();
-    let chair, table;
+    const textureLoader = new THREE.TextureLoader();
+    let chair, computer, desk, cameraObj, wheat, airPodsMax, airPodsMaxStand, iPad, iPadStand, macStudio, macBook, tripod;
 
     function loadModel(url, name, position, scale) {
       loader.load(
@@ -330,15 +543,43 @@
           model.position.set(position.x, position.y, position.z);
           model.castShadow = true;
           model.receiveShadow = true;
-          model.traverse((child) => {
-            if (child.isMesh) {
-              child.material.emissive = new THREE.Color(0x000000);
-              child.material.emissiveIntensity = 0;
-            }
-          });
+
+          if (name === 'chair') {
+            model.traverse((child) => {
+              if (child.isMesh) {
+                const pinkTexture = textureLoader.load('https://sashaart7.github.io/aleksandraart.github.io/pink_texture.png');
+                child.material = new THREE.MeshPhongMaterial({
+                  map: pinkTexture,
+                  shininess: 50
+                });
+              }
+            });
+          }
+          if (name === 'desk') {
+            model.traverse((child) => {
+              if (child.isMesh) {
+                const whiteTexture = textureLoader.load('https://sashaart7.github.io/aleksandraart.github.io/white_texture.png');
+                child.material = new THREE.MeshPhongMaterial({
+                  map: whiteTexture,
+                  shininess: 50
+                });
+              }
+            });
+          }
+
           scene.add(model);
           if (name === 'chair') chair = model;
-          if (name === 'table') table = model;
+          if (name === 'computer') computer = model;
+          if (name === 'desk') desk = model;
+          if (name === 'camera') cameraObj = model;
+          if (name === 'wheat') wheat = model;
+          if (name === 'airPodsMax') airPodsMax = model;
+          if (name === 'airPodsMaxStand') airPodsMaxStand = model;
+          if (name === 'iPad') iPad = model;
+          if (name === 'iPadStand') iPadStand = model;
+          if (name === 'macStudio') macStudio = model;
+          if (name === 'macBook') macBook = model;
+          if (name === 'tripod') tripod = model;
           console.log(`${name} загружен`);
         },
         undefined,
@@ -346,24 +587,54 @@
       );
     }
 
-    // Замените URL на ваши модели мебели
-    loadModel('https://sashaart7.github.io/aleksandraart.github.io/chair.glb', 'chair', { x: -2, y: 0, z: 0 }, 1);
-    loadModel('https://sashaart7.github.io/aleksandraart.github.io/desk.glb', 'table', { x: 2, y: 0, z: 0 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/chair.glb', 'chair', { x: 0, y: 0, z: 0 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/computer.glb', 'computer', { x: 0, y: 0, z: 0 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/desk.glb', 'desk', { x: 0, y: 0, z: 0 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/camera.glb', 'camera', { x: 0, y: 0, z: 0 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/wheat.glb', 'wheat', { x: 0, y: 0, z: 0 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/AirPods Max.glb', 'airPodsMax', { x: 0, y: 0, z: 0 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/AirPods Max stand.glb', 'airPodsMaxStand', { x: 0, y: 0, z: 0 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/iPad.glb', 'iPad', { x: 0, y: 0, z: 0 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/iPad stand.glb', 'iPadStand', { x: 0, y: 0, z: 0 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/Mac Studio.glb', 'macStudio', { x: 0, y: 0, z: 0 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/MacBook.glb', 'macBook', { x: 0, y: 0, z: 0 }, 1);
+    loadModel('https://sashaart7.github.io/aleksandraart.github.io/tripod.glb', 'tripod', { x: 0, y: 0, z: 0 }, 1);
 
-    // Камера и управление
-    camera.position.set(0, 3, 8);
+    const torus = new THREE.Mesh(
+      new THREE.TorusGeometry(0.5, 0.2, 16, 100),
+      new THREE.MeshPhongMaterial({ color: 0xff5555, shininess: 100 })
+    );
+    torus.position.set(3, 1, -2);
+    torus.castShadow = true;
+    scene.add(torus);
+
+    const sphere = new THREE.Mesh(
+      new THREE.SphereGeometry(0.3, 32, 32),
+      new THREE.MeshPhongMaterial({ color: 0x55ff55, shininess: 100 })
+    );
+    sphere.position.set(-3, 0.3, -1);
+    sphere.castShadow = true;
+    scene.add(sphere);
+
+    const lamp = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.2, 0.2, 1, 32),
+      new THREE.MeshPhongMaterial({ color: 0xffff00, shininess: 100 })
+    );
+    lamp.position.set(2, 0.5, 2);
+    lamp.castShadow = true;
+    scene.add(lamp);
+
+    camera.position.set(0, 5, 10);
     camera.lookAt(0, 0, 0);
 
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.minDistance = 2;
-    controls.maxDistance = 15;
+    controls.maxDistance = 20;
 
-    // Интерактивность
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
-    let selectedObject = null;
 
     function onInteraction(event) {
       event.preventDefault();
@@ -376,7 +647,7 @@
       }
 
       raycaster.setFromCamera(mouse, camera);
-      const clickableObjects = [chair, table];
+      const clickableObjects = [cameraObj, computer, macStudio];
       let isHoveringClickable = false;
 
       clickableObjects.forEach(obj => {
@@ -384,40 +655,15 @@
           const intersects = raycaster.intersectObject(obj, true);
           if (intersects.length > 0) {
             isHoveringClickable = true;
-            if (selectedObject !== intersects[0].object) {
-              if (selectedObject) {
-                selectedObject.traverse((child) => {
-                  if (child.isMesh) {
-                    child.material.emissive.setHex(0x000000);
-                    child.material.emissiveIntensity = 0;
-                  }
-                });
-              }
-              selectedObject = intersects[0].object;
-              selectedObject.traverse((child) => {
-                if (child.isMesh) {
-                  child.material.emissive.setHex(0x555555);
-                  child.material.emissiveIntensity = 0.5;
-                }
-              });
-            }
             if (event.type === 'click' || event.type === 'touchstart') {
-              if (obj === chair) document.getElementById('modal-chair').style.display = 'flex';
-              if (obj === table) document.getElementById('modal-table').style.display = 'flex';
+              if (obj === cameraObj) document.getElementById('modal-camera').style.display = 'flex';
+              if (obj === computer) document.getElementById('modal-computer').style.display = 'flex';
+              if (obj === macStudio) document.getElementById('modal-macstudio').style.display = 'flex';
             }
           }
         }
       });
 
-      if (!isHoveringClickable && selectedObject) {
-        selectedObject.traverse((child) => {
-          if (child.isMesh) {
-            child.material.emissive.setHex(0x000000);
-            child.material.emissiveIntensity = 0;
-          }
-        });
-        selectedObject = null;
-      }
       document.body.style.cursor = isHoveringClickable ? 'pointer' : 'default';
     }
 
@@ -425,7 +671,6 @@
     window.addEventListener('click', onInteraction);
     window.addEventListener('touchstart', onInteraction);
 
-    // Закрытие модальных окон
     const modals = document.querySelectorAll('.modal');
     modals.forEach(modal => {
       modal.addEventListener('click', (event) => {
@@ -444,7 +689,6 @@
       document.getElementById(modalId).style.display = 'none';
     }
 
-    // Музыка
     const music = document.getElementById('background-music');
     const musicIcon = document.getElementById('music-icon');
     let isMusicPlaying = false;
@@ -481,23 +725,52 @@
       isMusicPlaying = !isMusicPlaying;
     }
 
-    // Анимация
+    if (window.innerWidth > 768) {
+      const videoContainers = document.querySelectorAll('.video-preview-container');
+      videoContainers.forEach(container => {
+        const video = container.querySelector('.video-preview');
+        video.pause(); 
+        container.addEventListener('mouseenter', () => {
+          video.play();
+        });
+        container.addEventListener('mouseleave', () => {
+          video.pause();
+          video.currentTime = 0;
+        });
+      });
+    }
+
     function animate() {
       requestAnimationFrame(animate);
 
+      torus.rotation.x += 0.01;
+      torus.rotation.y += 0.01;
+      sphere.rotation.y += 0.01;
+
       if (chair) {
-        chair.rotation.y = Math.sin(Date.now() * 0.001) * 0.2;
+        chair.rotation.y = Math.sin(Date.now() * 0.001) * 0.4;
       }
-      if (table) {
-        table.rotation.y = Math.sin(Date.now() * 0.001) * 0.2;
-      }
+
+      raycaster.setFromCamera(mouse, camera);
+      const interactiveObjects = [
+        computer, macBook, macStudio, iPad, airPodsMax, 
+        cameraObj, wheat, torus, sphere, lamp
+      ];
+
+      interactiveObjects.forEach(obj => {
+        if (obj) {
+          const intersects = raycaster.intersectObject(obj, true);
+          const isHovered = intersects.length > 0;
+          const targetScale = isHovered ? 1.02 : 1;
+          obj.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
+        }
+      });
 
       controls.update();
       renderer.render(scene, camera);
     }
     animate();
 
-    // Адаптация при изменении размера окна
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
