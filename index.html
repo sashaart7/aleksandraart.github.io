@@ -516,11 +516,12 @@
     const loader = new THREE.GLTFLoader();
     const textureLoader = new THREE.TextureLoader();
     let chair, computer, desk, cameraObj, wheat, airPodsMax, airPodsMaxStand, iPad, iPadStand, macStudio, macBook, tripod;
-    let computerOutline, cameraOutline, macStudioOutline;
+    let cameraOutline, macStudioOutline;
 
     function createOutline(model) {
       if (!model) return null;
       const outlineGroup = new THREE.Group();
+      let meshCount = 0;
       model.traverse((child) => {
         if (child.isMesh && child.geometry) {
           const edges = new THREE.EdgesGeometry(child.geometry, 10);
@@ -528,9 +529,15 @@
             edges,
             new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 2 })
           );
+          outline.scale.copy(child.scale);
+          console.log(`${model.name || 'model'} outline scale for mesh: x=${outline.scale.x}, y=${outline.scale.y}, z=${outline.scale.z}`);
+          outline.position.copy(child.position);
+          outline.rotation.copy(child.rotation);
           outlineGroup.add(outline);
+          meshCount++;
         }
       });
+      console.log(`Outline for ${model.name || 'model'}: ${meshCount} meshes processed`);
       outlineGroup.visible = false;
       model.add(outlineGroup);
       return outlineGroup;
@@ -545,6 +552,7 @@
           model.position.set(position.x, position.y, position.z);
           model.castShadow = true;
           model.receiveShadow = true;
+          model.name = name;
           if (name === 'chair') {
             model.traverse((child) => {
               if (child.isMesh) {
@@ -579,10 +587,7 @@
           }
           scene.add(model);
           if (name === 'chair') chair = model;
-          if (name === 'computer') {
-            computer = model;
-            computerOutline = createOutline(model);
-          }
+          if (name === 'computer') computer = model;
           if (name === 'desk') desk = model;
           if (name === 'camera') {
             cameraObj = model;
@@ -672,7 +677,7 @@
       clickableObjects.forEach(obj => {
         if (obj) {
           const intersects = raycaster.intersectObject(obj, true);
-          const outline = obj === cameraObj ? cameraOutline : obj === computer ? computerOutline : macStudioOutline;
+          const outline = obj === cameraObj ? cameraOutline : obj === macStudio ? macStudioOutline : null;
           if (intersects.length > 0) {
             isHoveringClickable = true;
             if (outline) outline.visible = true;
