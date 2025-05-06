@@ -20,6 +20,7 @@
       top: 0; 
       left: 0; 
     }
+    /* Экран загрузки */
     .loader {
       position: fixed;
       top: 0;
@@ -65,6 +66,7 @@
       font-weight: 300;
       color: #cccccc;
     }
+    /* Индикатор загрузки в виде полоски */
     .progress-bar {
       width: 200px;
       height: 10px;
@@ -84,6 +86,7 @@
       0% { background-position: 0 0; }
       100% { background-position: 40px 0; }
     }
+    /* Основной контент */
     .content { 
       position: absolute; 
       top: 50%; 
@@ -226,6 +229,7 @@
       object-fit: contain;
       display: block; 
     }
+    /* Медиа-запросы для адаптации */
     @media (max-width: 768px) { 
       .loader h1 {
         font-size: 28px;
@@ -329,6 +333,7 @@
   </style>
 </head>
 <body>
+  <!-- Экран загрузки -->
   <div class="loader" id="loader">
     <div class="loader-content">
       <h1>Александра</h1>
@@ -338,7 +343,10 @@
       </div>
     </div>
   </div>
-  <div class="content" id="main-content"></div>
+  <!-- Основной контент (без фона и текста) -->
+  <div class="content" id="main-content">
+    <!-- Текст и фон убраны -->
+  </div>
   <div id="modal-camera" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal('modal-camera')">×</span>
@@ -486,9 +494,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://unpkg.com/three@0.134.0/examples/js/loaders/GLTFLoader.js"></script>
   <script src="https://unpkg.com/three@0.134.0/examples/js/controls/OrbitControls.js"></script>
-  <script src="https://unpkg.com/three@0.134.0/examples/js/postprocessing/EffectComposer.js"></script>
-  <script src="https://unpkg.com/three@0.134.0/examples/js/postprocessing/RenderPass.js"></script>
-  <script src="https://unpkg.com/three@0.134.0/examples/js/postprocessing/OutlinePass.js"></script>
   <script>
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -498,19 +503,6 @@
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.setClearColor(0x1a1a1a);
     document.body.appendChild(renderer.domElement);
-
-    const composer = new THREE.EffectComposer(renderer);
-    const renderPass = new THREE.RenderPass(scene, camera);
-    composer.addPass(renderPass);
-
-    const outlinePass = new THREE.OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), scene, camera);
-    outlinePass.visibleEdgeColor.set('#ffffff');
-    outlinePass.edgeGlow = 1;
-    outlinePass.edgeStrength = 4;
-    outlinePass.edgeThickness = 1;
-    outlinePass.pulsePeriod = 4;
-    composer.addPass(outlinePass);
-
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -520,19 +512,27 @@
     directionalLight.shadow.mapSize.height = 1024;
     directionalLight.shadow.bias = -0.0001;
     scene.add(directionalLight);
-
     const floorGeometry = new THREE.PlaneGeometry(20, 20);
     const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.8 });
     const floor = new THREE.Mesh(floorGeometry, floorMaterial);
     floor.rotation.x = -Math.PI / 2;
     floor.receiveShadow = true;
     scene.add(floor);
-
     const loader = new THREE.GLTFLoader();
     const textureLoader = new THREE.TextureLoader();
     let chair, computer, desk, cameraObj, wheat, airPodsMax, airPodsMaxStand, iPad, iPadStand, macStudio, macBook, tripod;
-    let interactiveObjects = [];
-
+    let computerOutline, cameraOutline, macStudioOutline;
+    function createOutline(model) {
+      if (!model) return null;
+      const edges = new THREE.EdgesGeometry(model.children[0].geometry);
+      const outline = new THREE.LineSegments(
+        edges,
+        new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 2 })
+      );
+      outline.visible = false;
+      model.add(outline);
+      return outline;
+    }
     function loadModel(url, name, position, scale) {
       loader.load(
         url,
@@ -542,7 +542,6 @@
           model.position.set(position.x, position.y, position.z);
           model.castShadow = true;
           model.receiveShadow = true;
-
           if (name === 'chair') {
             model.traverse((child) => {
               if (child.isMesh) {
@@ -565,17 +564,16 @@
               }
             });
           }
-
           scene.add(model);
           if (name === 'chair') chair = model;
           if (name === 'computer') {
             computer = model;
-            interactiveObjects.push(model);
+            computerOutline = createOutline(model);
           }
           if (name === 'desk') desk = model;
           if (name === 'camera') {
             cameraObj = model;
-            interactiveObjects.push(model);
+            cameraOutline = createOutline(model);
           }
           if (name === 'wheat') wheat = model;
           if (name === 'airPodsMax') airPodsMax = model;
@@ -584,7 +582,7 @@
           if (name === 'iPadStand') iPadStand = model;
           if (name === 'macStudio') {
             macStudio = model;
-            interactiveObjects.push(model);
+            macStudioOutline = createOutline(model);
           }
           if (name === 'macBook') macBook = model;
           if (name === 'tripod') tripod = model;
@@ -594,7 +592,6 @@
         (error) => console.error(`Ошибка загрузки ${name}:`, error)
       );
     }
-
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/chair.glb', 'chair', { x: 0, y: 0, z: 0 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/computer.glb', 'computer', { x: 0, y: 0, z: 0 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/desk.glb', 'desk', { x: 0, y: 0, z: 0 }, 1);
@@ -607,7 +604,6 @@
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/Mac Studio.glb', 'macStudio', { x: 0, y: 0, z: 0 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/MacBook.glb', 'macBook', { x: 0, y: 0, z: 0 }, 1);
     loadModel('https://sashaart7.github.io/aleksandraart.github.io/tripod.glb', 'tripod', { x: 0, y: 0, z: 0 }, 1);
-
     const torus = new THREE.Mesh(
       new THREE.TorusGeometry(0.5, 0.2, 16, 100),
       new THREE.MeshPhongMaterial({ color: 0xcccccc, shininess: 100 })
@@ -615,7 +611,6 @@
     torus.position.set(3, 1, -2);
     torus.castShadow = true;
     scene.add(torus);
-
     const sphere = new THREE.Mesh(
       new THREE.SphereGeometry(0.3, 32, 32),
       new THREE.MeshPhongMaterial({ color: 0xcccccc, shininess: 100 })
@@ -623,7 +618,6 @@
     sphere.position.set(-3, 0.3, -1);
     sphere.castShadow = true;
     scene.add(sphere);
-
     const lamp = new THREE.Mesh(
       new THREE.CylinderGeometry(0.2, 0.2, 1, 32),
       new THREE.MeshPhongMaterial({ color: 0xcccccc, shininess: 100 })
@@ -631,19 +625,15 @@
     lamp.position.set(2, 0.5, 2);
     lamp.castShadow = true;
     scene.add(lamp);
-
     camera.position.set(0, 5, 10);
     camera.lookAt(0, 0, 0);
-
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.minDistance = 2;
     controls.maxDistance = 20;
-
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
-
     function onInteraction(event) {
       event.preventDefault();
       if (event.type === 'touchstart') {
@@ -653,35 +643,31 @@
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
       }
-
       raycaster.setFromCamera(mouse, camera);
       const clickableObjects = [cameraObj, computer, macStudio];
       let isHoveringClickable = false;
-
-      outlinePass.selectedObjects = [];
-
       clickableObjects.forEach(obj => {
         if (obj) {
           const intersects = raycaster.intersectObject(obj, true);
+          const outline = obj === cameraObj ? cameraOutline : obj === computer ? computerOutline : macStudioOutline;
           if (intersects.length > 0) {
             isHoveringClickable = true;
-            outlinePass.selectedObjects.push(obj);
+            if (outline) outline.visible = true;
             if (event.type === 'click' || event.type === 'touchstart') {
               if (obj === cameraObj) document.getElementById('modal-camera').style.display = 'flex';
               if (obj === computer) document.getElementById('modal-computer').style.display = 'flex';
               if (obj === macStudio) document.getElementById('modal-macstudio').style.display = 'flex';
             }
+          } else {
+            if (outline) outline.visible = false;
           }
         }
       });
-
       document.body.style.cursor = isHoveringClickable ? 'pointer' : 'default';
     }
-
     window.addEventListener('mousemove', onInteraction);
     window.addEventListener('click', onInteraction);
     window.addEventListener('touchstart', onInteraction);
-
     const modals = document.querySelectorAll('.modal');
     modals.forEach(modal => {
       modal.addEventListener('click', (event) => {
@@ -695,15 +681,12 @@
         }
       });
     });
-
     function closeModal(modalId) {
       document.getElementById(modalId).style.display = 'none';
     }
-
     const music = document.getElementById('background-music');
     const musicIcon = document.getElementById('music-icon');
     let isMusicPlaying = false;
-
     window.addEventListener('load', () => {
       music.play().then(() => {
         isMusicPlaying = true;
@@ -713,7 +696,6 @@
         isMusicPlaying = false;
         musicIcon.src = 'https://sashaart7.github.io/aleksandraart.github.io/vikl.png';
       });
-
       setTimeout(() => {
         const loader = document.getElementById('loader');
         const mainContent = document.getElementById('main-content');
@@ -724,7 +706,6 @@
         }, 500);
       }, 2000);
     });
-
     function toggleMusic() {
       if (isMusicPlaying) {
         music.pause();
@@ -735,12 +716,11 @@
       }
       isMusicPlaying = !isMusicPlaying;
     }
-
     if (window.innerWidth > 768) {
       const videoContainers = document.querySelectorAll('.video-preview-container');
       videoContainers.forEach(container => {
         const video = container.querySelector('.video-preview');
-        video.pause(); 
+        video.pause();
         container.addEventListener('mouseenter', () => {
           video.play();
         });
@@ -750,25 +730,20 @@
         });
       });
     }
-
     function animate() {
       requestAnimationFrame(animate);
-
       torus.rotation.x += 0.01;
       torus.rotation.y += 0.01;
       sphere.rotation.y += 0.01;
-
       if (chair) {
         chair.rotation.y = Math.sin(Date.now() * 0.001) * 0.4;
       }
-
       raycaster.setFromCamera(mouse, camera);
-      const hoverObjects = [
+      const interactiveObjects = [
         computer, macBook, macStudio, iPad, airPodsMax, 
         cameraObj, wheat, torus, sphere, lamp
       ];
-
-      hoverObjects.forEach(obj => {
+      interactiveObjects.forEach(obj => {
         if (obj) {
           const intersects = raycaster.intersectObject(obj, true);
           const isHovered = intersects.length > 0;
@@ -776,18 +751,14 @@
           obj.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
         }
       });
-
       controls.update();
-      composer.render();
+      renderer.render(scene, camera);
     }
     animate();
-
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
-      composer.setSize(window.innerWidth, window.innerHeight);
-      outlinePass.resolution.set(window.innerWidth, window.innerHeight);
     });
   </script>
 </body>
