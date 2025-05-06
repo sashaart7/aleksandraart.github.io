@@ -9,8 +9,8 @@
     body { 
       margin: 0; 
       overflow-x: hidden; 
-      background: #f7e7e3; 
-      color: #333; 
+      background: #1a1a1a; 
+      color: #ffffff; 
       font-family: 'Poppins', sans-serif; 
     }
     canvas { 
@@ -20,14 +20,13 @@
       top: 0; 
       left: 0; 
     }
-    /* Экран загрузки */
     .loader {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: #f7e7e3;
+      background: #1a1a1a;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -42,9 +41,9 @@
     .loader-content {
       text-align: center;
       padding: 20px;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(40, 40, 40, 0.9);
       border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
       animation: bounceIn 1s ease;
     }
     @keyframes bounceIn {
@@ -57,28 +56,27 @@
       margin: 0 0 10px;
       letter-spacing: 1.5px;
       font-weight: 700;
-      color: #ff6f61;
+      color: #ffffff;
     }
     .loader p {
       font-size: 16px;
       line-height: 1.6;
       margin: 0 0 20px;
       font-weight: 300;
-      color: #555;
+      color: #cccccc;
     }
-    /* Индикатор загрузки в виде полоски */
     .progress-bar {
       width: 200px;
       height: 10px;
-      background: #fff;
+      background: #333;
       border-radius: 5px;
       overflow: hidden;
       margin: 0 auto;
     }
     .progress {
-      width: 100%; /* Полная ширина для анимации полосок */
+      width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, #ff6f61 25%, #fff 25%, #fff 50%, #ff6f61 50%, #ff6f61 75%, #fff 75%);
+      background: linear-gradient(90deg, #ffffff 25%, #333 25%, #333 50%, #ffffff 50%, #ffffff 75%, #333 75%);
       background-size: 40px 10px;
       animation: moveStripes 1s linear infinite;
     }
@@ -86,7 +84,6 @@
       0% { background-position: 0 0; }
       100% { background-position: 40px 0; }
     }
-    /* Основной контент */
     .content { 
       position: absolute; 
       top: 50%; 
@@ -121,19 +118,19 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.8);
       z-index: 10;
       justify-content: center;
       align-items: center;
       overflow-y: auto;
     }
     .modal-content {
-      background: #f7e7e3;
+      background: #2a2a2a;
       padding: 20px;
       border-radius: 15px;
       max-width: 90%; 
       text-align: center;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
       position: relative;
       margin: 10px; 
     }
@@ -149,11 +146,11 @@
       right: 15px;
       font-size: 28px;
       cursor: pointer;
-      color: #555;
+      color: #cccccc;
       transition: color 0.3s;
     }
     .close-btn:hover {
-      color: #000;
+      color: #ffffff;
     }
     .skills {
       display: flex;
@@ -181,13 +178,14 @@
       bottom: 0; 
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(40, 40, 40, 0.9);
       padding: 5px 10px;
       border-radius: 5px;
       font-size: 12px;
       opacity: 0;
       transition: opacity 0.3s;
       white-space: nowrap;
+      color: #ffffff;
     }
     .skill-item:hover span {
       opacity: 1;
@@ -228,8 +226,6 @@
       object-fit: contain;
       display: block; 
     }
-
-    /* Медиа-запросы для адаптации */
     @media (max-width: 768px) { 
       .loader h1 {
         font-size: 28px;
@@ -275,7 +271,6 @@
         width: 150px;
       }
     }
-
     @media (max-width: 480px) { 
       .loader h1 {
         font-size: 24px;
@@ -318,7 +313,6 @@
         width: 120px;
       }
     }
-
     @media (orientation: landscape) and (max-height: 500px) { 
       .modal-content {
         max-height: 80vh; 
@@ -335,34 +329,27 @@
   </style>
 </head>
 <body>
-  <!-- Экран загрузки -->
   <div class="loader" id="loader">
     <div class="loader-content">
-      <h1>Привет, я Александра</h1>
-      <p>Я веб-разработчик и 3D-дизайнер. Создаю интерактивные миры, где технологии встречаются с искусством.</p>
+      <h1>Александра</h1>
+      <p>Создаю цифровые миры, где искусство и технологии сливаются воедино.</p>
       <div class="progress-bar">
         <div class="progress"></div>
       </div>
     </div>
   </div>
-
-  <!-- Основной контент (без фона и текста) -->
-  <div class="content" id="main-content">
-    <!-- Текст и фон убраны -->
-  </div>
-
+  <div class="content" id="main-content"></div>
   <div id="modal-camera" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal('modal-camera')">×</span>
       <img src="https://sashaart7.github.io/aleksandraart.github.io/sashaphoto.png" alt="Обо мне">
-      <p>Обо мне: Я Александра, и моя страсть — создавать цифровые миры. Я сочетаю навыки программирования и дизайна, чтобы вдохновлять и удивлять. Люблю экспериментировать с 3D и находить новые способы самовыражения через технологии.</p>
+      <p>Я Александра — веб-разработчик и 3D-художник. Моя миссия — создавать интерактивные и визуально захватывающие проекты, объединяя программирование и дизайн.</p>
     </div>
   </div>
-
   <div id="modal-computer" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal('modal-computer')">×</span>
-      <h2>Мои проекты</h2>
+      <h2>Проекты</h2>
       <div class="project-list">
         <div class="video-preview-container">
           <video class="video-preview" loop muted autoplay playsinline>
@@ -370,23 +357,22 @@
           </video>
         </div>
         <div class="project-item">
-          <h3>3D-комната</h3>
-          <p>Интерактивная сцена с мебелью, созданная с помощью Three.js и Blender.</p>
+          <h3>3D-студия</h3>
+          <p>Интерактивная 3D-сцена, созданная с использованием Three.js и Blender.</p>
         </div>
         <div class="project-item">
           <h3>Веб-дизайн</h3>
-          <p>Минималистичный сайт с акцентом на UX и анимации.</p>
+          <p>Современный сайт с акцентом на пользовательский опыт и анимации.</p>
         </div>
-        <div class="project-item">3D-рабочая комната</div>
-        <div class="project-item">Интерактивный дизайн (скоро)</div>
+        <div class="project-item">3D-рабочая студия</div>
+        <div class="project-item">Интерактивный дизайн (в разработке)</div>
       </div>
     </div>
   </div>
-
   <div id="modal-macstudio" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal('modal-macstudio')">×</span>
-      <h2>Мои навыки</h2>
+      <h2>Навыки</h2>
       <div class="skills">
         <div class="skill-item">
           <img src="https://sashaart7.github.io/aleksandraart.github.io/html.png" alt="HTML">
@@ -491,18 +477,18 @@
       </div>
     </div>
   </div>
-
   <div class="music-toggle" onclick="toggleMusic()">
     <img id="music-icon" src="https://sashaart7.github.io/aleksandraart.github.io/vkl.png" alt="Music Toggle">
   </div>
-
   <audio id="background-music" loop>
     <source src="https://sashaart7.github.io/aleksandraart.github.io/relaxing.mp3" type="audio/mpeg">
   </audio>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://unpkg.com/three@0.134.0/examples/js/loaders/GLTFLoader.js"></script>
   <script src="https://unpkg.com/three@0.134.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://unpkg.com/three@0.134.0/examples/js/postprocessing/EffectComposer.js"></script>
+  <script src="https://unpkg.com/three@0.134.0/examples/js/postprocessing/RenderPass.js"></script>
+  <script src="https://unpkg.com/three@0.134.0/examples/js/postprocessing/OutlinePass.js"></script>
   <script>
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -510,8 +496,20 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    renderer.setClearColor(0xf7e7e3);
+    renderer.setClearColor(0x1a1a1a);
     document.body.appendChild(renderer.domElement);
+
+    const composer = new THREE.EffectComposer(renderer);
+    const renderPass = new THREE.RenderPass(scene, camera);
+    composer.addPass(renderPass);
+
+    const outlinePass = new THREE.OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), scene, camera);
+    outlinePass.visibleEdgeColor.set('#ffffff');
+    outlinePass.edgeGlow = 1;
+    outlinePass.edgeStrength = 4;
+    outlinePass.edgeThickness = 1;
+    outlinePass.pulsePeriod = 4;
+    composer.addPass(outlinePass);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
@@ -524,7 +522,7 @@
     scene.add(directionalLight);
 
     const floorGeometry = new THREE.PlaneGeometry(20, 20);
-    const floorMaterial = new THREE.MeshStandardMaterial({ color: 0xd9c2a7, roughness: 0.8 });
+    const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.8 });
     const floor = new THREE.Mesh(floorGeometry, floorMaterial);
     floor.rotation.x = -Math.PI / 2;
     floor.receiveShadow = true;
@@ -533,6 +531,7 @@
     const loader = new THREE.GLTFLoader();
     const textureLoader = new THREE.TextureLoader();
     let chair, computer, desk, cameraObj, wheat, airPodsMax, airPodsMaxStand, iPad, iPadStand, macStudio, macBook, tripod;
+    let interactiveObjects = [];
 
     function loadModel(url, name, position, scale) {
       loader.load(
@@ -569,15 +568,24 @@
 
           scene.add(model);
           if (name === 'chair') chair = model;
-          if (name === 'computer') computer = model;
+          if (name === 'computer') {
+            computer = model;
+            interactiveObjects.push(model);
+          }
           if (name === 'desk') desk = model;
-          if (name === 'camera') cameraObj = model;
+          if (name === 'camera') {
+            cameraObj = model;
+            interactiveObjects.push(model);
+          }
           if (name === 'wheat') wheat = model;
           if (name === 'airPodsMax') airPodsMax = model;
           if (name === 'airPodsMaxStand') airPodsMaxStand = model;
           if (name === 'iPad') iPad = model;
           if (name === 'iPadStand') iPadStand = model;
-          if (name === 'macStudio') macStudio = model;
+          if (name === 'macStudio') {
+            macStudio = model;
+            interactiveObjects.push(model);
+          }
           if (name === 'macBook') macBook = model;
           if (name === 'tripod') tripod = model;
           console.log(`${name} загружен`);
@@ -602,7 +610,7 @@
 
     const torus = new THREE.Mesh(
       new THREE.TorusGeometry(0.5, 0.2, 16, 100),
-      new THREE.MeshPhongMaterial({ color: 0xff5555, shininess: 100 })
+      new THREE.MeshPhongMaterial({ color: 0xcccccc, shininess: 100 })
     );
     torus.position.set(3, 1, -2);
     torus.castShadow = true;
@@ -610,7 +618,7 @@
 
     const sphere = new THREE.Mesh(
       new THREE.SphereGeometry(0.3, 32, 32),
-      new THREE.MeshPhongMaterial({ color: 0x55ff55, shininess: 100 })
+      new THREE.MeshPhongMaterial({ color: 0xcccccc, shininess: 100 })
     );
     sphere.position.set(-3, 0.3, -1);
     sphere.castShadow = true;
@@ -618,7 +626,7 @@
 
     const lamp = new THREE.Mesh(
       new THREE.CylinderGeometry(0.2, 0.2, 1, 32),
-      new THREE.MeshPhongMaterial({ color: 0xffff00, shininess: 100 })
+      new THREE.MeshPhongMaterial({ color: 0xcccccc, shininess: 100 })
     );
     lamp.position.set(2, 0.5, 2);
     lamp.castShadow = true;
@@ -650,11 +658,14 @@
       const clickableObjects = [cameraObj, computer, macStudio];
       let isHoveringClickable = false;
 
+      outlinePass.selectedObjects = [];
+
       clickableObjects.forEach(obj => {
         if (obj) {
           const intersects = raycaster.intersectObject(obj, true);
           if (intersects.length > 0) {
             isHoveringClickable = true;
+            outlinePass.selectedObjects.push(obj);
             if (event.type === 'click' || event.type === 'touchstart') {
               if (obj === cameraObj) document.getElementById('modal-camera').style.display = 'flex';
               if (obj === computer) document.getElementById('modal-computer').style.display = 'flex';
@@ -752,12 +763,12 @@
       }
 
       raycaster.setFromCamera(mouse, camera);
-      const interactiveObjects = [
+      const hoverObjects = [
         computer, macBook, macStudio, iPad, airPodsMax, 
         cameraObj, wheat, torus, sphere, lamp
       ];
 
-      interactiveObjects.forEach(obj => {
+      hoverObjects.forEach(obj => {
         if (obj) {
           const intersects = raycaster.intersectObject(obj, true);
           const isHovered = intersects.length > 0;
@@ -767,7 +778,7 @@
       });
 
       controls.update();
-      renderer.render(scene, camera);
+      composer.render();
     }
     animate();
 
@@ -775,6 +786,8 @@
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
+      composer.setSize(window.innerWidth, window.innerHeight);
+      outlinePass.resolution.set(window.innerWidth, window.innerHeight);
     });
   </script>
 </body>
